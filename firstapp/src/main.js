@@ -7,13 +7,13 @@ let win;
 
 function createWindow() {
     // メインウィンドウを作成します。
-    win = new BrowserWindow({ width: 600, height: 400 });
+    win = new BrowserWindow({ width: 960, height: 640 });
 
     // メインウィンドウに表示するURLを指定します。
     win.loadURL(`file://${ __dirname }/index.html`);
 
     // デベロッパーツールを起動します。
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
 
     // メインウィンドウが閉じられたときの処理。
     win.on('closed', () => {
