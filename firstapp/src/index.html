@@ -1,33 +1,49 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>FirstApp</title>
-        <link rel="stylesheet" href="style.css">
-        <link href="https://fonts.googleapis.com/css?family=Lalezar" rel="stylesheet">
-    </head>
-    <body>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>FirstApp</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Lalezar" rel="stylesheet">
+  </head>
+  <body>
+    <header id="header">
+      <h1>Web Design in 4 minutes</h1>
+    </header>
+    <main>
+      <h1>初めてのElectron</h1>
 
-        <h1>初めてのElectron</h1>
+      We are using node <script>document.write(process.versions.node)</script>,
+      Chrome <script>document.write(process.version.chrome)</script>,
+      and Electron <script>document.write(process.versions.electron)</script>.
 
-        We are using node <script>document.write(process.versions.node)</script>,
-        Chrome <script>document.write(process.version.chrome)</script>,
-        and Electron <script>document.write(process.versions.electron)</script>.
+      <h2>Spacing</h2>
+      間隔
 
-        <h2>Spacing</h2>
-        間隔
+      <h2>Color & contrast</h2>
+      色とコントラスト
 
-        <h2>Color & contrast</h2>
-        色とコントラスト
+      <h2>Balance</h2>
+      バランス
+      <pre>
+body {
+  color: #566b78;
+}
 
-        <h2>Balance</h2>
-        バランス
-        <pre>
-            <code>
-$ echo hello!
-> hello!
-            </code>
-        </pre>
+code,
+pre {
+  background: #f5f7f9;
+  border-bottom: 1px solid #d8dee9;
+  color: #a7adba;
+}
 
-    </body>
+pre {
+  border-left: 2px solid #69c;
+}
+      </pre>
+        
+      <h2>Primary color</h2>
+      <a href="./index.html">原色</a>
+    </main>
+  </body>
 </html>

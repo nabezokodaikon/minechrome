@@ -1,36 +1,59 @@
+@import 'https://fonts.googleapis.com/css?family=Roboto:300,400,500';
+
 body {
-    margin: 0 auto;
-    max-width: 50em;
+  margin: 0 auto;
+  max-width: 50em;
 
-    font-family: 'Lalezar', cursive;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 
-    line-height: 1.5;
-    padding: 4em 1em;
+  line-height: 1.5;
+  padding: 4em 1em;
 
-    color: #555;
+  color: #566b78;
+}
+
+header {
+  background-color: #263d36;
+  background-image: url("header.jpg");
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: cover;
+  line-height: 1.2;
+  padding: 10vw 2em;
+  text-align: center;
+}
+
+header img {
 }
 
 h2 {
-    margin-top: 1em;
-    padding-top: 1em;
+  margin-top: 1em;
+  padding-top: 1em;
 }
 
 h1,
 h2,
 strong {
-    color: #333;
+  color: #333;
 }
 
 code,
 pre {
-    background: #eee;
+  background: #f5f7f9;
+  border-bottom: 1px solid #d8dee9;
+  color: #a7abda;
 }
 
 code {
-    padding: 2px 4px;
-    vertical-align: text-bottom;
+  padding: 2px 4px;
+  vertical-align: text-bottom;
 }
 
 pre {
-    padding: 1em;
+  padding: 1em;
+  border-left: 2px solid #69c;
+}
+
+a {
+  color: #e81c4f;
 }
