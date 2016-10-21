@@ -1,6 +1,6 @@
-# 初めてのElectron
+# Electron入門
 ## 参考
-* [初めてのElectron](https://ics.media/entry/7298)
+* [Electron入門サイト](https://ics.media/tutorial-electron)
 * [デザインについて](http://jgthms.com/web-design-in-4-minutes/#share)
 
 
