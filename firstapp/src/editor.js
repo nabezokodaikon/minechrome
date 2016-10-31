@@ -1,3 +1,5 @@
+var fs = require("fs");
+
 var inputArea = null;
 var inputTxt = null;
 var footerArea = null;
@@ -35,8 +37,9 @@ function onLoad() {
 };
 
 function openLoadFile() {
-  var win = browserWindow.getFocusedWindow();
+  // var win = browserWindow.getFocusedWindow();
 
+  const {dialog} = require("electron").remote;
   dialog.showOpenDialog(
       win,
       {
@@ -74,7 +77,8 @@ function saveFile() {
     return;
   }
 
-  var win = browserWindow.getFocusedWindow();
+  // var win = browserWindow.getFocusedWindow();
+  const {dialog} = require("electron");
   dialog.showMessageBox(win, {
     title: "ファイルの上書き保存を行います。",
     type: "info",
@@ -99,7 +103,8 @@ function writeFile() {
 }
 
 function saveNewFile() {
-  var win = browserWindow.getFocuseWindow();
+  // var win = browserWindow.getFocuseWindow();
+  const {dialog} = require("electron");
   dialog.showSaveDialog(
       win,
       {
