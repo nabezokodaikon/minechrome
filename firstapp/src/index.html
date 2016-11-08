@@ -4,16 +4,14 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Electron Text Editor</title>
     <link rel="stylesheet" href="main.css">
-    <script src="editor.js"></script>
+    <script src="keystroke.js"></script>
   </head>
-  <body onload="onLoad()">
+  <body onload="">
     <div id="header_fixed">
-      <button type="button" class="btn-sm btn-primary" onclick="openLoadFile()">読み込み</button>
-      <button type="button" class="btn-sm btn-primary" onclick="saveFile()">保存</button>
+      <button type="button" class="btn-sm btn-primary" onclick="">読み込み</button>
+      <button type="button" class="btn-sm btn-primary" onclick="">保存</button>
     </div>
+    <div id="keystroke"></div>
     <div id="footer_fixed"></div>
-    <div id="input_area">
-      <div id="input_txt"></div>
-    </div>
   </body>
 </html>
