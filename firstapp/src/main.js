@@ -1,40 +1,35 @@
-// アプリケーション作成用のモジュールを読み込み。
-const electron = require('electron');
-const { app } = electron;
-const { BrowserWindow } = electron;
+const {app, BrowserWindow} = require("electron");
+const path = require("path");
+const url = require("url");
 
 let win;
 
 function createWindow() {
-  // メインウィンドウを作成します。
-  win = new BrowserWindow({ width: 960, height: 640 });
+  win = new BrowserWindow({width: 1280, height: 800});
 
-  // メインウィンドウに表示するURLを指定します。
-  win.loadURL(`file://${ __dirname }/index.html`);
+  win.loadURL(url.format({
+    pathname: path.join(__dirname, "index.html"),
+    protocol: "file:",
+    slashes: true
+  }));
 
-  // デベロッパーツールを起動します。
-  // win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
-  // メインウィンドウが閉じられたときの処理。
-  win.on('closed', () => {
+  win.on("closed", () => {
     win = null;
   });
 }
 
-// 初期化が完了したときの処理。
-app.on('ready', createWindow)
+app.on("ready", createWindow);
 
-// 全てのウィンドウが閉じたらアプリケーションを終了します。
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });
 
-// アプリケーションがアクティブになったときの処理。
-app.on('activate', () => {
-  // メインウィンドウが消えている場合は、再度メインウィンドウを表示する。
-  if (win === null) {
+app.on("activate", () => {
+  if (win == null) {
     createWindow();
   }
 });
