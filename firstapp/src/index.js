@@ -12,3 +12,7 @@ window.addEventListener("load", (e) => {
 ipcRenderer.on(webViewCtl.getChannel(), (e, message) => {
   console.log("Received: " + message);
 });
+
+document.addEventListener("keydown", (e) => {
+  console.log(e);
+});
