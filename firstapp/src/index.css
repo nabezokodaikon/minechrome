@@ -61,7 +61,7 @@ body {
   justify-content: center;
 }
 
-#contents textarea {
+#contents webView {
   flex-grow: 1;
   margin: 2px;
 }
