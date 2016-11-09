@@ -1,8 +1,11 @@
+"use strict";
+
 const {app, BrowserWindow, globalShortcut} = require("electron");
 const path = require("path");
 const url = require("url");
+const webViewCtl = require("./webview-controller.js");
 
-let win;
+let win = null;
 
 function createWindow() {
   win = new BrowserWindow({width: 1280, height: 800});
@@ -25,7 +28,7 @@ function createWindow() {
       keyCode: "Backspace"
     };
     win.webContents.sendInputEvent(event);
-  })
+  });
 
   globalShortcut.register("Control+M", () => {
     const event = {
@@ -33,7 +36,7 @@ function createWindow() {
       keyCode: "\u000d"
     };
     win.webContents.sendInputEvent(event);
-  })
+  });
 
   globalShortcut.register("Control+I", () => {
     const event = {
@@ -41,25 +44,32 @@ function createWindow() {
       keyCode: "Tab"
     };
     win.webContents.sendInputEvent(event);
-  })
+  });
 
   globalShortcut.register("Control+[", () => {
+    // TODO: Does not react.
     const event = {
       type: "keyDown",
       keyCode: "Escape"
     };
     win.webContents.sendInputEvent(event);
-  })
+  });
 
   globalShortcut.register("Control+P", () => {
     // TODO: Move to preview page.
     console.log("Control+P");
-  })
+    win.webContents.send(
+        webViewCtl.getChannel(), 
+        webViewCtl.getMoveToPreviewPageMessage());
+  });
 
   globalShortcut.register("Control+N", () => {
     // TODO: Move to next page.
     console.log("Control+N");
-  })
+    win.webContents.send(
+        webViewCtl.getChannel(), 
+        webViewCtl.getMoveToNextPageMessage());
+  });
 }
 
 app.on("ready", createWindow);
