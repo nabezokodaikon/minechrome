@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require("electron");
+const {app, BrowserWindow, globalShortcut} = require("electron");
 const path = require("path");
 const url = require("url");
 
@@ -18,6 +18,48 @@ function createWindow() {
   win.on("closed", () => {
     win = null;
   });
+
+  globalShortcut.register("Control+H", () => {
+    const event = {
+      type: "keyDown",
+      keyCode: "Backspace"
+    };
+    win.webContents.sendInputEvent(event);
+  })
+
+  globalShortcut.register("Control+M", () => {
+    const event = {
+      type: "char",
+      keyCode: "\u000d"
+    };
+    win.webContents.sendInputEvent(event);
+  })
+
+  globalShortcut.register("Control+I", () => {
+    const event = {
+      type: "keyDown",
+      keyCode: "Tab"
+    };
+    win.webContents.sendInputEvent(event);
+  })
+
+  globalShortcut.register("Control+[", () => {
+    const event = {
+      type: "keyDown",
+      keyCode: "Escape"
+    };
+    win.webContents.sendInputEvent(event);
+  })
+
+  globalShortcut.register("Control+P", () => {
+    // TODO: Move to preview page.
+    console.log("Control+P");
+  })
+
+  globalShortcut.register("Control+N", () => {
+    // TODO: Move to next page.
+    console.log("Control+N");
+  })
 }
 
 app.on("ready", createWindow);
