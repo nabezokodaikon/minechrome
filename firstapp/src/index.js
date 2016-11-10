@@ -3,6 +3,7 @@
 const {remote, ipcRenderer} = require("electron");
 const {Menu, MenuItem} = remote;
 const webViewCtl = require("./webview-controller.js");
+const win = remote.getCurrentWindow();
 
 const contextMenuTemplate = [
   {
@@ -22,7 +23,13 @@ const contextMenuTemplate = [
   },
   {
     label: "MenuItem1", click() {
-      console.log("item 1 clicked");
+      const contents = remote.getCurrentWindow().webContents;
+      console.log(contents);
+      // console.log(selectionText);
+      // var selObj = window.getSelection();
+      // console.log(selObj);
+      // var selRange = selObj.getRangeAt(0);
+      // console.log(selRange);
     },
   }
 ];
@@ -41,13 +48,22 @@ window.addEventListener("load", (e) => {
   webView = document.createElement("webview");
   webView.src= "https://www.google.co.jp/";
   contents.appendChild(webView);
+
 }, false);
 
-window.addEventListener("contextmenu", (e) => {
+// window.addEventListener("contextmenu", (e, params) => {
+  // e.preventDefault();
+  // console.log(e);
+  // contextMenu.popup(remote.getCurrentWindow());
+// }, false);
+
+// document.addEventListener("keydown", (e) => {
+  // console.log(e);
+// });
+
+win.webContents.on("context-menu", (e, params) => {
   e.preventDefault();
-  contextMenu.popup(remote.getCurrentWindow());
-}, false);
-
-document.addEventListener("keydown", (e) => {
-  console.log(e);
+  console.log("context-menu");
+  contextMenu.popup(win);
 });
+
