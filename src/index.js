@@ -98,4 +98,27 @@ window.addEventListener("load", (e) => {
   contents.appendChild(webView);
   // webView.addEventListener("dom-ready", onReady, {once: true});
   webView.addEventListener("dom-ready", onReady, false);
+
+  // Hook the reload shortcut key.
+  webView.addEventListener("keydown", (e) => {
+    console.log(e);
+    if (!e.altKey && !e.shiftKey && !e.metaKey &&
+        e.ctrlKey && e.code == "KeyR") {
+      webView.reload();
+      e.preventDefault();
+      return;
+    }
+  });
+
+  // Hook the new window event.
+ webView.addEventListener("new-window", (e) => {
+    console.log("new-window.url: " + e.url);
+    webView.loadURL(e.url);
+  });
+
+  webView.addEventListener("did-navigate", (e) => {
+    console.log("did-navigate.url: " + e.url);
+  });
+
+
 }, false);
