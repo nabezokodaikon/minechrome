@@ -5,6 +5,7 @@ const {Menu, MenuItem} = remote;
 const path = require("path");
 const url = require("url");
 const win = remote.getCurrentWindow();
+const stringUtil = require("./string-util.js");
 const webViewCtl = require("./webview-controller.js");
 
 let addressInput = null;
@@ -37,11 +38,14 @@ function popupContextMenu(e, params) {
   contextMenu.popup(win);
 }
 
-function onSubmit(e) {
-  e.preventDefault();   
-  console.log(addressInput.value);
+function searchByURL(address) {
+  webView.loadURL(address);
+}
 
-  webView.loadURL(addressInput.value);
+function searchByKeyWord(keyWord) {
+  const encodedKeyWord = stringUtil.fixedEncodeURIComponent(keyWord);
+  const address = "https://www.google.com/webhp?ie=UTF-8#q=" + encodedKeyWord 
+  webView.loadURL(address);
 }
 
 function moveToPreviewPage() {
@@ -78,7 +82,15 @@ function onReady() {
   });
 
   // The once option of addEventListener will be available in Chrome version 55 and beyond.
-  document.getElementById("addressForm").addEventListener("submit", onSubmit, false);
+  document.getElementById("addressForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const value = addressInput.value;
+    if (stringUtil.isURL(value)) {
+      searchByURL(value);
+    } else {
+      searchByKeyWord(value);
+    }
+  }, false);
   webView.removeEventListener("dom-ready", onReady, false);
 }
 
@@ -87,6 +99,10 @@ window.addEventListener("load", (e) => {
 
   addressInput = document.getElementById("addressInput");
   addressInput.value = "https://www.google.com"; 
+  addressInput.addEventListener("focus", (e) => {
+    addressInput.select();
+  });
+
   webView = document.createElement("webview");
   webView.src = url.format({
     pathname: path.join(__dirname, "blank.html"),
@@ -94,8 +110,6 @@ window.addEventListener("load", (e) => {
     slashes: true
   });
 
-  const contents = document.getElementById("contents");
-  contents.appendChild(webView);
   // webView.addEventListener("dom-ready", onReady, {once: true});
   webView.addEventListener("dom-ready", onReady, false);
 
@@ -114,11 +128,14 @@ window.addEventListener("load", (e) => {
  webView.addEventListener("new-window", (e) => {
     console.log("new-window.url: " + e.url);
     webView.loadURL(e.url);
-  });
+  }, false);
 
   webView.addEventListener("did-navigate", (e) => {
     console.log("did-navigate.url: " + e.url);
-  });
+    addressInput.value = e.url;
+    webView.focus();
+  }, false);
 
-
+  const contents = document.getElementById("contents");
+  contents.appendChild(webView);
 }, false);
