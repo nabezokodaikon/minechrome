@@ -55,6 +55,8 @@ function moveToNextPage() {
 }
 
 function onReady() {
+  console.log("webView: dom-ready");
+
   // Context menu event in BrowserWindow.
   win.webContents.on("context-menu", popupContextMenu);
 
@@ -75,11 +77,13 @@ function onReady() {
     }
   });
 
+  // The once option of addEventListener will be available in Chrome version 55 and beyond.
   document.getElementById("addressForm").addEventListener("submit", onSubmit, false);
+  webView.removeEventListener("dom-ready", onReady, false);
 }
 
 window.addEventListener("load", (e) => {
-  console.log("window load");
+  console.log("window: load");
 
   addressInput = document.getElementById("addressInput");
   addressInput.value = "https://www.google.com"; 
@@ -92,5 +96,6 @@ window.addEventListener("load", (e) => {
 
   const contents = document.getElementById("contents");
   contents.appendChild(webView);
-  webView.addEventListener("dom-ready", onReady, {once: true});
+  // webView.addEventListener("dom-ready", onReady, {once: true});
+  webView.addEventListener("dom-ready", onReady, false);
 }, false);
