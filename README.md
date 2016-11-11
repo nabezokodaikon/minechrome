@@ -1,4 +1,7 @@
-# Electron入門
+# mineChrome
+It is a mine Google Chrome for me only.
+... and getting started for JavaScript.
+
 ## 参考
 * [Electron入門サイト](https://ics.media/tutorial-electron)
 * [デザインについて](http://jgthms.com/web-design-in-4-minutes/#share)
@@ -13,11 +16,10 @@ $ npm install -g electron-prebuilt
 ### アプリケーション実行用のファイルの用意
 以下のようなファイル構成を作成する。
 ```
-firstapp
-└── src
-    ├── index.html
-    ├── main.js
-    └── package.json
+src
+ ├── index.html
+ ├── main.js
+ └── package.json
 ```
 
 #### package.json
@@ -52,5 +54,5 @@ $ npm install -g electron-packager
 # 64bit向けに、
 # 1.1.3バージョンとしてパッケージングし、
 # 2回目以降は上書きを行う。
-$ electron-packager src FirstApp --platform=darwin,win32 --arch=64 --version=1.1.3 --overwrite
+$ electron-packager src mineChrome --platform=darwin,win32 --arch=64 --version=1.1.3 --overwrite
 ```
