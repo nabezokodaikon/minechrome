@@ -2,9 +2,12 @@
 
 const {remote, ipcRenderer} = require("electron");
 const {Menu, MenuItem} = remote;
-const webViewCtl = require("./webview-controller.js");
+const path = require("path");
+const url = require("url");
 const win = remote.getCurrentWindow();
+const webViewCtl = require("./webview-controller.js");
 
+let addressInput = null;
 let webView = null;
 
 function popupContextMenu(e, params) {
@@ -34,33 +37,60 @@ function popupContextMenu(e, params) {
   contextMenu.popup(win);
 }
 
-ipcRenderer.on(webViewCtl.getChannel(), (e, message) => {
-  console.log("Received: " + message);
-});
+function onSubmit(e) {
+  e.preventDefault();   
+  console.log(addressInput.value);
+
+  webView.loadURL(addressInput.value);
+}
+
+function moveToPreviewPage() {
+  // webView.goBack();
+  webView.goToOffset(-1);
+}
+
+function moveToNextPage() {
+  // webView.goForward();
+  webView.goToOffset(1);
+}
+
+function onReady() {
+  // Context menu event in BrowserWindow.
+  win.webContents.on("context-menu", popupContextMenu);
+
+  // Context menu event in webview tag.
+  webView.getWebContents().on("context-menu", popupContextMenu);
+
+  ipcRenderer.on(webViewCtl.getChannel(), (e, message) => {
+    console.log("Received: " + message);
+    switch (message) {
+      case webViewCtl.getMoveToPreviewPageMessage():
+        moveToPreviewPage();
+        break;
+      case webViewCtl.getMoveToNextPageMessage():
+        moveToNextPage();
+        break;
+      default:
+        return;
+    }
+  });
+
+  document.getElementById("addressForm").addEventListener("submit", onSubmit, false);
+}
 
 window.addEventListener("load", (e) => {
   console.log("window load");
 
-  const contents = document.getElementById("contents");
+  addressInput = document.getElementById("addressInput");
+  addressInput.value = "https://www.google.com"; 
   webView = document.createElement("webview");
-  webView.src= "https://www.google.co.jp/";
+  webView.src = url.format({
+    pathname: path.join(__dirname, "blank.html"),
+    protocol: "file:",
+    slashes: true
+  });
+
+  const contents = document.getElementById("contents");
   contents.appendChild(webView);
-
-  webView.addEventListener("dom-ready", () => {
-    // Context menu event in webview tag.
-    webView.getWebContents().on("context-menu", popupContextMenu);
-  }, {once: true});
+  webView.addEventListener("dom-ready", onReady, {once: true});
 }, false);
-
-// Context menu event in BrowserWindow.
-win.webContents.on("context-menu", popupContextMenu);
-
-// window.addEventListener("contextmenu", (e, params) => {
-  // e.preventDefault();
-  // console.log(e);
-  // contextMenu.popup(remote.getCurrentWindow());
-// }, false);
-
-// document.addEventListener("keydown", (e) => {
-  // console.log(e);
-// });

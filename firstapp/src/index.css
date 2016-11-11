@@ -46,7 +46,13 @@ body {
   justify-content: center;
 }
 
-#header input {
+#header form {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+#header form input {
   flex-grow: 1;
   margin: 2px;
 }
