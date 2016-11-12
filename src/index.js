@@ -49,12 +49,12 @@ function searchByKeyWord(keyWord) {
 }
 
 function showFindInputBox() {
-  const elm = document.getElementById("findInputBox");
+  const elm = document.getElementById("findTextBox");
   elm.style.visibility = "visible";
 }
 
 function hiddenFindInputBox() {
-  const elm = document.getElementById("findInputBox");
+  const elm = document.getElementById("findTextBox");
   elm.style.visibility = "hidden";
 }
 

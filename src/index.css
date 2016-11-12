@@ -72,7 +72,7 @@ body {
   justify-content: center;
 }
 
-#findInputBox {
+#findTextBox {
   display: flex;
   justify-content: center;
 
@@ -90,7 +90,7 @@ body {
   visibility: hidden;
 }
 
-#findInputText {
+#findTextInput {
   flex-grow: 1;
   margin: 2px;
 }
