@@ -29,12 +29,14 @@ body {
 
   color: #aaaaaa;
   background-color: #555555;
-  
+
   z-index: 1;
 
   visibility: hidden;
 }
 
+
+/* Header */
 #header {
   min-height: 32px;
   height: 32px;
@@ -46,20 +48,23 @@ body {
   justify-content: center;
 }
 
-#header form {
+#addressForm {
   display: flex;
   justify-content: center;
   flex-grow: 1;
 }
 
-#header form input {
+#addressInput {
   flex-grow: 1;
   margin: 2px;
 }
 
+
+/* Contents */
 #contents {
   flex-grow: 1;
 
+  position: relative;
   color: #000000;
   background-color: #aaffaa;
 
@@ -67,11 +72,37 @@ body {
   justify-content: center;
 }
 
-#contents webView {
+#findInputBox {
+  display: flex;
+  justify-content: center;
+
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  /* left: 100%; */
+  /* margin-left: -100px; */
+  min-width: 256px;
+  /* width: 256px; */
+  height: 32px;
+
+  color: #aaaaaa;
+  background-color: #555555;
+
+  z-index: 1;
+}
+
+#findInputText {
   flex-grow: 1;
   margin: 2px;
 }
 
+#webView {
+  flex-grow: 1;
+  margin: 2px;
+}
+
+
+/* Footer */
 #footer {
   min-height: 64px;
   height: 64px;

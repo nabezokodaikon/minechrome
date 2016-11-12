@@ -103,7 +103,7 @@ window.addEventListener("load", (e) => {
     addressInput.select();
   });
 
-  webView = document.createElement("webview");
+  webView = document.getElementById("webView");
   webView.src = url.format({
     pathname: path.join(__dirname, "blank.html"),
     protocol: "file:",
@@ -135,7 +135,4 @@ window.addEventListener("load", (e) => {
     addressInput.value = e.url;
     webView.focus();
   }, false);
-
-  const contents = document.getElementById("contents");
-  contents.appendChild(webView);
 }, false);
