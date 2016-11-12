@@ -48,6 +48,16 @@ function searchByKeyWord(keyWord) {
   webView.loadURL(address);
 }
 
+function showFindInputBox() {
+  const elm = document.getElementById("findInputBox");
+  elm.style.visibility = "visible";
+}
+
+function hiddenFindInputBox() {
+  const elm = document.getElementById("findInputBox");
+  elm.style.visibility = "hidden";
+}
+
 function moveToPreviewPage() {
   // webView.goBack();
   webView.goToOffset(-1);
@@ -58,8 +68,59 @@ function moveToNextPage() {
   webView.goToOffset(1);
 }
 
+function onGlobalKeyDown(e, message) {
+  console.log("global.keydown: " + message);
+
+  switch (message) {
+    case webViewCtl.getMoveToPreviewPageMessage():
+      moveToPreviewPage();
+      break;
+    case webViewCtl.getMoveToNextPageMessage():
+      moveToNextPage();
+      break;
+    default:
+      return;
+  }
+}
+
+function onDocumentKeyDown(e) {
+  console.log("document.keydown: " + e)
+
+  if (e.altKey || e.shiftKey || e.metaKey) {
+    return;
+  }
+
+  if (e.ctrlKey) {
+    switch (e.code) {
+      case "KeyR":
+        e.preventDefault();
+        webView.reload();
+        return;
+      case "KeyF":
+        e.preventDefault();
+        showFindInputBox();
+        return;
+      case "BracketLeft":
+        e.preventDefault();
+        hiddenFindInputBox();
+        return;
+      default:
+        return;
+    }
+  } else {
+    switch (e.code) {
+      case "Escape":
+        e.preventDefault();
+        hiddenFindInputBox();
+        return;
+      default:
+        return;
+    }
+  }
+}
+
 function onReady() {
-  console.log("webView: dom-ready");
+  console.log("webView.dom-ready");
 
   // Context menu event in BrowserWindow.
   win.webContents.on("context-menu", popupContextMenu);
@@ -67,21 +128,11 @@ function onReady() {
   // Context menu event in webview tag.
   webView.getWebContents().on("context-menu", popupContextMenu);
 
-  ipcRenderer.on(webViewCtl.getChannel(), (e, message) => {
-    console.log("Received: " + message);
-    switch (message) {
-      case webViewCtl.getMoveToPreviewPageMessage():
-        moveToPreviewPage();
-        break;
-      case webViewCtl.getMoveToNextPageMessage():
-        moveToNextPage();
-        break;
-      default:
-        return;
-    }
-  });
+  // Key down events.
+  ipcRenderer.on(webViewCtl.getChannel(), onGlobalKeyDown);
+  document.addEventListener("keydown", onDocumentKeyDown, false);
 
-  // The once option of addEventListener will be available in Chrome version 55 and beyond.
+  // Search event.
   document.getElementById("addressForm").addEventListener("submit", (e) => {
     e.preventDefault();
     const value = addressInput.value;
@@ -91,11 +142,13 @@ function onReady() {
       searchByKeyWord(value);
     }
   }, false);
+  
+  // The once option of addEventListener will be available in Chrome version 55 and beyond.
   webView.removeEventListener("dom-ready", onReady, false);
 }
 
 window.addEventListener("load", (e) => {
-  console.log("window: load");
+  console.log("window.load: " + e);
 
   addressInput = document.getElementById("addressInput");
   addressInput.value = "https://www.google.com"; 
@@ -104,34 +157,19 @@ window.addEventListener("load", (e) => {
   });
 
   webView = document.getElementById("webView");
-  webView.src = url.format({
-    pathname: path.join(__dirname, "blank.html"),
-    protocol: "file:",
-    slashes: true
-  });
 
+  // The once option of addEventListener will be available in Chrome version 55 and beyond.
   // webView.addEventListener("dom-ready", onReady, {once: true});
   webView.addEventListener("dom-ready", onReady, false);
 
-  // Hook the reload shortcut key.
-  webView.addEventListener("keydown", (e) => {
-    console.log(e);
-    if (!e.altKey && !e.shiftKey && !e.metaKey &&
-        e.ctrlKey && e.code == "KeyR") {
-      webView.reload();
-      e.preventDefault();
-      return;
-    }
-  });
-
   // Hook the new window event.
- webView.addEventListener("new-window", (e) => {
-    console.log("new-window.url: " + e.url);
+  webView.addEventListener("new-window", (e) => {
+    console.log("webview.new-window.url: " + e.url);
     webView.loadURL(e.url);
   }, false);
 
   webView.addEventListener("did-navigate", (e) => {
-    console.log("did-navigate.url: " + e.url);
+    console.log("webview.did-navigate.url: " + e.url);
     addressInput.value = e.url;
     webView.focus();
   }, false);

@@ -79,16 +79,15 @@ body {
   position: absolute;
   top: 2px;
   right: 2px;
-  /* left: 100%; */
-  /* margin-left: -100px; */
   min-width: 256px;
-  /* width: 256px; */
   height: 32px;
 
   color: #aaaaaa;
   background-color: #555555;
 
   z-index: 1;
+
+  visibility: hidden;
 }
 
 #findInputText {
