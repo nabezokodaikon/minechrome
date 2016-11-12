@@ -10,6 +10,7 @@ const webViewCtl = require("./webview-controller.js");
 
 let addressInput = null;
 let webView = null;
+let tempFlag = false;
 
 function popupContextMenu(e, params) {
   e.preventDefault();
@@ -51,11 +52,15 @@ function searchByKeyWord(keyWord) {
 function showFindInputBox() {
   const elm = document.getElementById("findTextBox");
   elm.style.visibility = "visible";
+  // TODO: Temp
+  tempFlag = true;
 }
 
 function hiddenFindInputBox() {
   const elm = document.getElementById("findTextBox");
   elm.style.visibility = "hidden";
+  // TODO: Temp
+  tempFlag = false;
 }
 
 function moveToPreviewPage() {
@@ -68,15 +73,47 @@ function moveToNextPage() {
   webView.goToOffset(1);
 }
 
+function moveToNextText() {
+  const elm = document.getElementById("findTextInput");
+  const text = elm.value;
+  webView.findInPage(text, {
+    forward: true,
+    findNext: false,
+    matchCase: false,
+    wordStart: false,
+    medialCapitalAsWordStart: false
+  });
+}
+
+function moveToPreviewText() {
+  const elm = document.getElementById("findTextInput");
+  const text = elm.value;
+  webView.findInPage(text, {
+    forward: false,
+    findNext: false,
+    matchCase: false,
+    wordStart: false,
+    medialCapitalAsWordStart: false
+  });
+}
+
 function onGlobalKeyDown(e, message) {
   console.log("global.keydown: " + message);
 
   switch (message) {
     case webViewCtl.getMoveToPreviewPageMessage():
-      moveToPreviewPage();
+      if (tempFlag) {
+        moveToPreviewText();
+      } else {
+        moveToPreviewPage();
+      }
       break;
     case webViewCtl.getMoveToNextPageMessage():
-      moveToNextPage();
+      if (tempFlag) {
+        moveToNextText();
+      } else {
+        moveToNextPage();
+      }
       break;
     default:
       return;
@@ -142,7 +179,7 @@ function onReady() {
       searchByKeyWord(value);
     }
   }, false);
-  
+
   // The once option of addEventListener will be available in Chrome version 55 and beyond.
   webView.removeEventListener("dom-ready", onReady, false);
 }

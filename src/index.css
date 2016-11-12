@@ -38,14 +38,14 @@ body {
 
 /* Header */
 #header {
+  display: flex;
+  justify-content: center;
+
   min-height: 32px;
   height: 32px;
 
   color: #000000;
   background-color: #ffaaaa;
-
-  display: flex;
-  justify-content: center;
 }
 
 #addressForm {
@@ -76,14 +76,15 @@ body {
   display: flex;
   justify-content: center;
 
-  position: absolute;
-  top: 2px;
-  right: 2px;
   min-width: 256px;
-  height: 32px;
+  min-height: 32px;
 
   color: #aaaaaa;
   background-color: #555555;
+
+  position: absolute;
+  top: 2px;
+  right: 2px;
 
   z-index: 1;
 
@@ -97,7 +98,6 @@ body {
 
 #webView {
   flex-grow: 1;
-  margin: 2px;
 }
 
 
