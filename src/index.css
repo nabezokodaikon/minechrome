@@ -18,23 +18,6 @@ body {
   height: 100%;
 }
 
-#keystroke {
-  /* viewportに対する相対位置で表示する。 */
-  position: fixed;
-  top: 10px;
-  left: 50%;
-  margin-left: -50px;
-  width: 100px;
-  height: 100px;
-
-  color: #aaaaaa;
-  background-color: #555555;
-
-  z-index: 1;
-
-  visibility: hidden;
-}
-
 
 /* Header */
 #header {
