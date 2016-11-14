@@ -1,6 +1,10 @@
 # mineChrome
 It is a mine Google Chrome for me only.
+
 ... and getting started for JavaScript.
+
+... and getting started for English.
+
 
 ## 参考
 * [Electron入門サイト](https://ics.media/tutorial-electron)
