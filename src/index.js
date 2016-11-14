@@ -41,8 +41,8 @@ modeManager.registListAction({
 
 let webView = null;
 let addressInput = null;
-let findTextInput = null;
 let findTextBox = null;
+let findTextInput = null;
 
 function browseModeEnterAction() {
   webView.focus();
@@ -83,9 +83,7 @@ function searchModeDoAction(e) {
   if (stringUtil.isURL(value)) {
     webView.loadURL(value);
   } else {
-    const encodedKeyWord = stringUtil.fixedEncodeURIComponent(value);
-    const address = "https://www.google.com/webhp?ie=UTF-8#q=" + encodedKeyWord 
-    webView.loadURL(address);
+    searchByKeyword(value);
   }
 }
 
@@ -161,54 +159,28 @@ function listModePreviewAction() {
   // TODO: Required implementation.
 }
 
-function popupContextMenu(e, params) {
-  e.preventDefault();
-  const contextMenuTemplate = [
-    {
-      role: "undo"
-    },
-    {
-      role: "separator"
-    },
-    {
-      role: "copy"
-    },
-    {
-      role: "paste"
-    },
-    {
-      role: "separator"
-    },
-    {
-      label: "Search for [" + params.selectionText + "]", click() {
-      },
-    }
-  ];
-  const contextMenu = Menu.buildFromTemplate(contextMenuTemplate);
-  contextMenu.popup(win);
+function searchByKeyword(keyword) {
+  if (stringUtil.isEmpty(keyword)) {
+    return;
+  }
+
+  const encodedKeyWord = stringUtil.fixedEncodeURIComponent(keyword);
+  const address = "https://www.google.com/webhp?ie=UTF-8#q=" + encodedKeyWord 
+  webView.loadURL(address);
 }
 
 function onReady() {
   console.log("webView.dom-ready");
 
-  // Context menu event in BrowserWindow.
-  win.webContents.on("context-menu", popupContextMenu);
-
-  // Context menu event in webview tag.
-  webView.getWebContents().on("context-menu", popupContextMenu);
-
   addressInput.addEventListener("focus", (e) => {
-    console.log("addressInput.focus");
     modeManager.enterSearchMode();
   }, false);
 
   findTextInput.addEventListener("focus", (e) => {
-    console.log("findTextInput.focus");
     modeManager.enterFindTextMode();
   }, false);
 
   webView.addEventListener("focus", (e) => {
-    console.log("webView.focus");
     modeManager.enterBrowseMode();
   }, false);
 
@@ -221,7 +193,7 @@ function onReady() {
   webView.addEventListener("did-navigate", (e) => {
     console.log("webview.did-navigate.url: " + e.url);
     addressInput.value = e.url;
-    webView.focus();
+    modeManager.enterBrowseMode();
   }, false);
 
   addressInput.addEventListener("keypress", (e) => {
@@ -235,8 +207,28 @@ function onReady() {
     }
   }, false);
 
+  webView.addEventListener("keypress", (e) => {
+    console.log("webView.keypress: " + e.code);
+    if (e.altKey || e.shiftKey || e.metaKey || !e.ctrlKey) {
+      return;
+    }
+
+    switch (e.code) {
+      case "KeyG":
+        const script = "{ result: window.getSelection().toString() }";
+        webView.executeJavaScript(script, false, (result) => {
+          searchByKeyword(result);
+        });
+        return;
+      case "KeyR":
+        webView.reload();
+        return;
+      default:
+        return;
+    }
+  }, false);
+
   findTextInput.addEventListener("keypress", (e) => {
-    console.log("findTextInput.keypress: " + e.code);
     switch (e.code) {
       case "Enter":
         modeManager.next();
@@ -247,7 +239,6 @@ function onReady() {
   }, false);
 
   findTextInput.addEventListener("input", (e) => {
-    console.log("findTextInput.input");
     modeManager.next();
   }, false);
 
@@ -259,8 +250,6 @@ function onReady() {
 }
 
 window.addEventListener("load", (e) => {
-  console.log("window.load: " + e);
-
   webView = document.getElementById("webView");
   addressInput = document.getElementById("addressInput");
   findTextBox = document.getElementById("findTextBox");
@@ -275,7 +264,6 @@ window.addEventListener("load", (e) => {
 // Global key down event.
 ipcRenderer.on(webViewCtl.channel, (e, message) => {
   console.log("global.keydown: " + message);
-
   switch (message) {
     case webViewCtl.nextActionMessage:
       modeManager.next();
@@ -302,12 +290,13 @@ document.addEventListener("keydown", (e) => {
   }
 
   switch (e.code) {
+    case "KeyR":
+      // Disable to window reload. 
+      // Because the webview reload to run on webview tag's keypress event.
+      e.preventDefault();
+      return;
     case "KeyF":
       modeManager.enterFindTextMode(e);
-      return;
-    case "KeyR":
-      e.preventDefault();
-      webView.reload();
       return;
     case "KeyS":
       modeManager.enterSearchMode();
