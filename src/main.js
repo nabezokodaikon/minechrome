@@ -56,16 +56,12 @@ function createWindow() {
   });
 
   globalShortcut.register("Control+P", () => {
-    // TODO: Move to preview page.
-    console.log("Control+P");
     win.webContents.send(
         webViewCtl.getChannel(), 
         webViewCtl.getMoveToPreviewPageMessage());
   });
 
   globalShortcut.register("Control+N", () => {
-    // TODO: Move to next page.
-    console.log("Control+N");
     win.webContents.send(
         webViewCtl.getChannel(), 
         webViewCtl.getMoveToNextPageMessage());

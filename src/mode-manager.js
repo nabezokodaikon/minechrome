@@ -45,6 +45,9 @@ module.exports = {
   },
 
   enterBrowseMode: function(e) {
+    if (currentAction == browseAction) {
+      return;
+    }
     browseAction.enter(e);
     searchAction.escape();
     findTextAction.escape();
@@ -52,6 +55,9 @@ module.exports = {
     currentAction = browseAction;
   },
   enterSearchMode: function(e) {
+    if (currentAction == searchAction) {
+      return;
+    }
     browseAction.escape();
     searchAction.enter(e);
     findTextAction.escape();
@@ -59,6 +65,9 @@ module.exports = {
     currentAction = searchAction;
   },
   enterFindTextMode: function(e) {
+    if (currentAction == findTextAction) {
+      return;
+    }
     browseAction.escape();
     searchAction.escape();
     findTextAction.enter(e);
@@ -66,6 +75,9 @@ module.exports = {
     currentAction = findTextAction;
   },
   enterListMode: function(e) {
+    if (currentAction == listAction) {
+      return;
+    }
     browseAction.escape();
     searchAction.escape();
     findTextAction.escape();
@@ -81,5 +93,5 @@ module.exports = {
   },
   preview: function(e) {
     currentAction.preview(e);
-  },
+  }
 }

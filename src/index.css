@@ -48,12 +48,6 @@ body {
   background-color: #ffaaaa;
 }
 
-#addressForm {
-  display: flex;
-  justify-content: center;
-  flex-grow: 1;
-}
-
 #addressInput {
   flex-grow: 1;
   margin: 2px;
