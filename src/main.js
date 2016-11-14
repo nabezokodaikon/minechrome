@@ -9,6 +9,8 @@ let win = null;
 
 function createWindow() {
   win = new BrowserWindow({width: 1280, height: 800});
+  win.setAutoHideMenuBar(true);
+  win.setMenuBarVisibility(false);
 
   win.loadURL(url.format({
     pathname: path.join(__dirname, "index.html"),
