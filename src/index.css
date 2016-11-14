@@ -36,19 +36,6 @@ body {
   margin: 2px;
 }
 
-
-/* Contents */
-#contents {
-  flex-grow: 1;
-
-  position: relative;
-  color: #000000;
-  background-color: #aaffaa;
-
-  display: flex;
-  justify-content: center;
-}
-
 #findTextBox {
   display: flex;
   justify-content: center;
@@ -71,6 +58,19 @@ body {
 #findTextInput {
   flex-grow: 1;
   margin: 2px;
+}
+
+
+/* Contents */
+#contents {
+  flex-grow: 1;
+
+  position: relative;
+  color: #000000;
+  background-color: #aaffaa;
+
+  display: flex;
+  justify-content: center;
 }
 
 #webView {
