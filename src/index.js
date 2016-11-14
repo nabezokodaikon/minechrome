@@ -72,9 +72,7 @@ function searchModeEscapeAction() {
   // TODO: Required implementation.
 }
 
-function searchModeDoAction(e) {
-  e.preventDefault();
-
+function searchModeDoAction() {
   const value = addressInput.value;
   if (stringUtil.isEmpty(value)) {
     return;
@@ -104,9 +102,8 @@ function findTextModeEscapeAction() {
   findTextBox.style.visibility = "hidden";
 }
 
-function findTextModeDoAction(e) {
-  e.preventDefault();
-  nextForFindTextMode();
+function findTextModeDoAction() {
+  findTextModeNextAction();
 }
 
 function findTextModeNextAction() {
@@ -200,28 +197,8 @@ function onReady() {
     console.log("addressInput.keypress: " + e.code);
     switch (e.code) {
       case "Enter":
-        modeManager.do(e);
-        return;
-      default:
-        return;
-    }
-  }, false);
-
-  webView.addEventListener("keypress", (e) => {
-    console.log("webView.keypress: " + e.code);
-    if (e.altKey || e.shiftKey || e.metaKey || !e.ctrlKey) {
-      return;
-    }
-
-    switch (e.code) {
-      case "KeyG":
-        const script = "{ result: window.getSelection().toString() }";
-        webView.executeJavaScript(script, false, (result) => {
-          searchByKeyword(result);
-        });
-        return;
-      case "KeyR":
-        webView.reload();
+        e.preventDefault();
+        modeManager.do();
         return;
       default:
         return;
@@ -231,7 +208,8 @@ function onReady() {
   findTextInput.addEventListener("keypress", (e) => {
     switch (e.code) {
       case "Enter":
-        modeManager.next();
+        e.preventDefault();
+        modeManager.do();
         return;
       default:
         return;
@@ -281,6 +259,7 @@ document.addEventListener("keydown", (e) => {
   console.log("document.keydown: " + e.code);
 
   if (e.code == "Escape") {
+    e.preventDefault();
     modeManager.enterBrowseMode(e);
     return;
   }
@@ -290,15 +269,23 @@ document.addEventListener("keydown", (e) => {
   }
 
   switch (e.code) {
-    case "KeyR":
-      // Disable to window reload. 
-      // Because the webview reload to run on webview tag's keypress event.
+    case "KeyG":
       e.preventDefault();
+      const script = "{ result: window.getSelection().toString() }";
+      webView.executeJavaScript(script, false, (result) => {
+        searchByKeyword(result);
+      });
+      return;
+    case "KeyR":
+      e.preventDefault();
+      webView.reload();
       return;
     case "KeyF":
+      e.preventDefault();
       modeManager.enterFindTextMode(e);
       return;
     case "KeyS":
+      e.preventDefault();
       modeManager.enterSearchMode();
       return;
     default:
