@@ -273,14 +273,14 @@ window.addEventListener("load", (e) => {
 
 
 // Global key down event.
-ipcRenderer.on(webViewCtl.getChannel(), (e, message) => {
+ipcRenderer.on(webViewCtl.channel, (e, message) => {
   console.log("global.keydown: " + message);
 
   switch (message) {
-    case webViewCtl.getMoveToNextPageMessage():
+    case webViewCtl.nextActionMessage:
       modeManager.next();
       return;
-    case webViewCtl.getMoveToPreviewPageMessage():
+    case webViewCtl.previewActionMessage:
       modeManager.preview();
       return;
     default:

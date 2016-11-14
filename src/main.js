@@ -55,16 +55,16 @@ function createWindow() {
     win.webContents.sendInputEvent(event);
   });
 
-  globalShortcut.register("Control+P", () => {
-    win.webContents.send(
-        webViewCtl.getChannel(), 
-        webViewCtl.getMoveToPreviewPageMessage());
-  });
-
   globalShortcut.register("Control+N", () => {
     win.webContents.send(
-        webViewCtl.getChannel(), 
-        webViewCtl.getMoveToNextPageMessage());
+        webViewCtl.channel, 
+        webViewCtl.nextActionMessage);
+  });
+
+  globalShortcut.register("Control+P", () => {
+    win.webContents.send(
+        webViewCtl.channel, 
+        webViewCtl.previewActionMessage);
   });
 }
 

@@ -1,13 +1,11 @@
 "use strict";
 
+const channel = "globalShortcut";
+const nextActionMessage = "nextAction";
+const previewActionMessage = "previewAction";
+
 module.exports = {
-  getChannel: function() {
-    return "globalShortcut";
-  },
-  getMoveToPreviewPageMessage: function() {
-    return "moveToPreviewPage";
-  },
-  getMoveToNextPageMessage: function() {
-    return "moveToNextPage";
-  },
+  channel: channel,
+  nextActionMessage: nextActionMessage,
+  previewActionMessage: previewActionMessage
 }
