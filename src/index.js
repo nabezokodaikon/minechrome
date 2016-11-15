@@ -8,6 +8,7 @@ const win = remote.getCurrentWindow();
 const stringUtil = require("./string-util.js");
 const webViewCtl = require("./webview-controller.js");
 const modeManager = require("./mode-manager.js");
+const listKeystroke = require("./list-keystroke.js");
 
 // Regist on mode manage.
 modeManager.registBrowseAction({
@@ -39,10 +40,14 @@ modeManager.registListAction({
   preview: listModePreviewAction,
 });
 
+listKeystroke.registHistoryDisplayAction(HistoryListDisplayAction);
+listKeystroke.registBookmarkDisplayAction(BookmarkListDisplayAction);
+
 let webView = null;
 let addressInput = null;
 let findTextBox = null;
 let findTextInput = null;
+let footer = null;
 
 function browseModeEnterAction() {
   webView.focus();
@@ -138,10 +143,12 @@ function findTextModePreviewAction() {
 
 function listModeEnterAction() {
   // TODO: Required implementation.
+  footer.style.visibility = "visible";
 }
 
 function listModeEscapeAction() {
   // TODO: Required implementation.
+  footer.style.visibility = "hidden";
 }
 
 function listModeDoAction() {
@@ -154,6 +161,16 @@ function listModeNextAction() {
 
 function listModePreviewAction() {
   // TODO: Required implementation.
+}
+
+function HistoryListDisplayAction() {
+  // TODO: Required implementation.
+  modeManager.enterListMode();
+}
+
+function BookmarkListDisplayAction() {
+  // TODO: Required implementation.
+  modeManager.enterListMode();
 }
 
 function searchByKeyword(keyword) {
@@ -232,6 +249,7 @@ window.addEventListener("load", (e) => {
   addressInput = document.getElementById("addressInput");
   findTextBox = document.getElementById("findTextBox");
   findTextInput = document.getElementById("findTextInput");
+  footer = document.getElementById("footer");
 
   // The once option of addEventListener will be available in Chrome version 55 and beyond.
   // webView.addEventListener("dom-ready", onReady, {once: true});
@@ -257,6 +275,10 @@ ipcRenderer.on(webViewCtl.channel, (e, message) => {
 // Document key down event.
 document.addEventListener("keydown", (e) => {
   console.log("document.keydown: " + e.code);
+
+  if (listKeystroke.push(e)) {
+    e.preventDefault();
+  }
 
   if (e.code == "Escape") {
     e.preventDefault();
