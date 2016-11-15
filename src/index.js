@@ -9,6 +9,8 @@ const stringUtil = require("./string-util.js");
 const webViewCtl = require("./webview-controller.js");
 const modeManager = require("./mode-manager.js");
 const listKeystroke = require("./list-keystroke.js");
+const listController = require("./list-controller.js");
+const listDisplayCount = 16;
 
 // Regist on mode manage.
 modeManager.registBrowseAction({
@@ -48,6 +50,7 @@ let addressInput = null;
 let findTextBox = null;
 let findTextInput = null;
 let footer = null;
+let listItemFindInput = null;
 
 function browseModeEnterAction() {
   webView.focus();
@@ -144,6 +147,7 @@ function findTextModePreviewAction() {
 function listModeEnterAction() {
   // TODO: Required implementation.
   footer.style.visibility = "visible";
+  listItemFindInput.focus();
 }
 
 function listModeEscapeAction() {
@@ -165,6 +169,7 @@ function listModePreviewAction() {
 
 function HistoryListDisplayAction() {
   // TODO: Required implementation.
+  listController.setTestList("");
   modeManager.enterListMode();
 }
 
@@ -237,6 +242,8 @@ function onReady() {
     modeManager.next();
   }, false);
 
+  listController.init(document, listDisplayCount);
+
   // First action.
   modeManager.enterSearchMode();
 
@@ -250,6 +257,7 @@ window.addEventListener("load", (e) => {
   findTextBox = document.getElementById("findTextBox");
   findTextInput = document.getElementById("findTextInput");
   footer = document.getElementById("footer");
+  listItemFindInput = document.getElementById("listItemFindInput");
 
   // The once option of addEventListener will be available in Chrome version 55 and beyond.
   // webView.addEventListener("dom-ready", onReady, {once: true});

@@ -16,10 +16,6 @@ body {
   height: 100%;
 }
 
-a {
-  text-decoration: none;
-}
-
 #container {
   display: flex;
   flex-direction: column;
@@ -126,6 +122,16 @@ a {
   margin: 0.2em;
   list-style-type: none;
 }
+
+#listBox li {
+  height: 1em;
+}
+
+#listBox li a {
+  text-decoration: none;
+  white-space: nowrap;
+}
+
 
 #listItemFindBox {
   display: flex;
