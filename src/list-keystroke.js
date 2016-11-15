@@ -2,20 +2,13 @@
 
 const Immutable = require("immutable");
 
-class Keystroke {
-  constructor(args) {
-    this.event = args.event;
-    this.time = args.time;
-  }
-}
-
 const prefixCode = "KeyL";
 const historyCode = "KeyH"
 const bookmarkCode = "KeyB"
-const interval = 3000;
+const interval = 3000.0;
 const emptyList = Immutable.List();
 
-let keystrokeList = emptyList; 
+let eventList = emptyList; 
 let historyDisplayAction = () => {};
 let bookmarkDisplayAction = () => {};
 
@@ -27,36 +20,29 @@ module.exports = {
     bookmarkDisplayAction = action;
   },
   push: (e) => {
-
     if (e.altKey || e.shiftKey || e.metaKey) {
       return false;
     }
 
-    keystrokeList = keystrokeList.push(
-      new Keystroke({
-        event: e,
-        time: Date.now()
-      }
-    )); 
-
-    if (keystrokeList.size < 2) {
+    eventList = eventList.push(e); 
+    if (eventList.size < 2) {
       return false;
     }
 
     try {
-      const target = keystrokeList.skip(keystrokeList.size - 2);
+      const target = eventList.skip(eventList.size - 2);
       const first = target.first();
-      if (!first.event.ctrlKey || first.event.code != prefixCode) {
+      if (!first.ctrlKey || first.code != prefixCode) {
         return false;
       }
 
       const last = target.last();
-      if ((last.time - first.time) > interval) {
+      if ((last.timeStamp - first.timeStamp) > interval) {
         return false;
       }
 
       try {
-        switch (last.event.code) {
+        switch (last.code) {
           case historyCode:
             console.log("Show history.");
             historyDisplayAction();
@@ -69,10 +55,10 @@ module.exports = {
             return false;
         }
       } finally {
-        keystrokeList = emptyList;
+        eventList = emptyList;
       }
     } finally {
-      keystrokeList = keystrokeList.skip(1);
+      eventList = eventList.skip(1);
     }
   }
 }

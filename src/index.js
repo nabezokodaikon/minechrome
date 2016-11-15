@@ -278,6 +278,7 @@ document.addEventListener("keydown", (e) => {
 
   if (listKeystroke.push(e)) {
     e.preventDefault();
+    return;
   }
 
   if (e.code == "Escape") {
