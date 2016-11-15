@@ -16,6 +16,10 @@ body {
   height: 100%;
 }
 
+a {
+  text-decoration: none;
+}
+
 #container {
   display: flex;
   flex-direction: column;
@@ -28,12 +32,9 @@ body {
 
 /* Header */
 #header {
-  display: flex;
-  justify-content: center;
+  flex-direction: column;
 
-  min-height: 2em;
-
-  background-color: #ffffff;
+  background-color: #f7f7f7;
 
   border-style: solid;
   border-width: 0em 0em 0.1em 0em;
@@ -42,9 +43,9 @@ body {
 
 #addressBox {
   display: flex;
-  justify-content: center;
   flex-grow: 1;
 
+  min-height: 1.4em;
   margin: 0.2em;
 
   border-style: solid;
@@ -102,16 +103,49 @@ body {
 
 /* Footer */
 #footer {
-  bottom: 0em;		
-  min-width: 100%;		
-  min-height: 16ex;
+  flex-direction: column;
+
+  bottom: 0em;
+  min-width: 100%;
 
   position: fixed;
 
   z-index: 1;
 
-  opacity: 0.5;
-  background-color: #aaaaff;
+  background-color: #f7f7f7;
+
+  border-style: solid;
+  border-width: 0.1em 0em 0em 0em;
+  border-color: #aaaaaa transparent transparent transparent;
 
   visibility: hidden;
 }
+
+#listBox {
+  flex-grow: 1;
+  margin: 0.2em;
+  list-style-type: none;
+}
+
+#listItemFindBox {
+  display: flex;
+  flex-grow: 1;
+
+  min-height: 1.4em;
+  margin: 0.2em;
+
+  border-style: solid;
+  border-width: 0.1em;
+  border-radius: 0.2em;
+  border-color: #cccccc;
+}
+
+#listItemFindInput {
+  flex-grow: 1;
+  margin: 0em 0.2em 0em 0.2em;
+}
+
+.activeListItem { background-color: #5d91c6; }
+.activeListItemLink { color: #f7f7f7; }
+.inactiveListItem { background-color: transparent; }
+.inactiveListItemLink { color: #565656; }
