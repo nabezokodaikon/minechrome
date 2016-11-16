@@ -3,7 +3,7 @@
 const Immutable = require("immutable");
 
 const prefixCode = "KeyL";
-const historyCode = "KeyH"
+const historyCode = "KeyL"
 const bookmarkCode = "KeyB"
 const interval = 3000.0;
 const emptyList = Immutable.List();
@@ -32,7 +32,7 @@ module.exports = {
     try {
       const target = eventList.skip(eventList.size - 2);
       const first = target.first();
-      if (!first.ctrlKey || first.code != prefixCode) {
+      if (!(first.ctrlKey && first.code == prefixCode)) {
         return false;
       }
 
