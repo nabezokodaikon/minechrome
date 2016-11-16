@@ -10,7 +10,7 @@ const webViewCtl = require("./webview-controller.js");
 const modeManager = require("./mode-manager.js");
 const listKeystroke = require("./list-keystroke.js");
 const listController = require("./list-controller.js");
-const listDisplayCount = 16;
+const listDisplayCount = 8;
 
 // Regist on mode manage.
 modeManager.registBrowseAction({
@@ -161,10 +161,12 @@ function listModeDoAction() {
 
 function listModeNextAction() {
   // TODO: Required implementation.
+  listController.next(listItemFindInput.text);
 }
 
 function listModePreviewAction() {
   // TODO: Required implementation.
+  listController.preview(listItemFindInput.text);
 }
 
 function HistoryListDisplayAction() {

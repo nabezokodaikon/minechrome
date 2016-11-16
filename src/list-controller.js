@@ -43,19 +43,47 @@ const testList = Immutable.List.of(
 console.log(testList.first().text);
 console.log(testList.last().url);
 console.log(testList.filter(a => a.text.indexOf("rc") > -1).last().text)
+console.log(Immutable.Range(3, 8).toArray())
+for (const i of Immutable.Range(3, 8)) {
+  console.log(i);
+}
+
+const activeBackgroundColor = "#5d91c6";
+const activeFontColor = "#f7f7f7";
 
 let listBox = null;
+let linkArray = [];
 let displayCount = 0;
+let currentItemList = Immutable.List();
 let currentKeyword = "";
 let currentIndex = 0;
-let startIndex = 0;
-let endIndex = 0;
+let currentStartIndex = 0;
+let currentEndIndex = 0;
 
-function filteringList(list, keyword) {
+function filteringList(list, keyword, startIndex, endIndex) {
   if (stringUtil.isEmpty(keyword)) {
-    return list.filter(a => a.text.indexOf(keyword) > -1 && startIndex <= a.index && a.index <= endIndex).toArray();
+    return list.filter(a =>
+        startIndex <= a.index &&
+        a.index <= endIndex).toArray();
   } else {
-    return list.filter(a => startIndex <= a.index && a.index <= endIndex).toArray();
+    return list.filter(a =>
+        a.text.indexOf(keyword) > -1 &&
+        startIndex <= a.index &&
+        a.index <= endIndex).toArray();
+  }
+}
+
+function setList(keyword, startIndex) {
+  currentStartIndex = startIndex; 
+  currentEndIndex = (currentItemList.size < displayCount)?
+    currentItemList.size - 1:
+    currentStartIndex + displayCount - 1; 
+  const itemArray = filteringList(currentItemList, keyword, currentStartIndex, currentEndIndex);
+  for (const i of Array.from(Array(displayCount).keys())) {
+    const item = itemArray[i];
+    const link = linkArray[i];
+    link.href = item.url;
+    link.innerHTML = item.keyword;
   }
 }
 
@@ -68,13 +96,68 @@ module.exports = {
     listBox = document.getElementById("listBox");
     displayCount = count;
 
-    for (var i = 0; i < displayCount; i++) {
+    for (const i of Array.from(Array(displayCount).keys())) {
+      const item = document.createElement("li");
       const link = document.createElement("a");
       link.href = "";
       link.innerHTML = "*";
-      const item = document.createElement("li");
       item.appendChild(link);
       listBox.appendChild(item);
+      linkArray.push(link);
+    }
+  },
+  next: (keyword) => {
+    if (listBox == null) {
+      return;
+    }
+
+    if (currentIndex >= currentItemList.size - 1) {
+      currentIndex = currentItemList.size - 1;
+      return;
+    }
+
+    if (currentIndex < currentEndIndex) {
+      const prevLink = linkArray[currentIndex - currentStartIndex];
+      prevLink.style.color = "inherit";
+      prevLink.parentElement.style.backgroundColor = "inherit";
+
+      if (currentIndex < testList.size - 1) {
+        currentIndex++;
+      }
+
+      const nextLink = linkArray[currentIndex - currentStartIndex];
+      nextLink.style.color = activeFontColor;
+      nextLink.parentElement.style.backgroundColor = activeBackgroundColor;
+    } else {
+      currentIndex++;
+      setList(keyword, currentStartIndex + 1);
+    }
+  },
+  preview: (keyword) => {
+    if (listBox == null) {
+      return;
+    }
+
+    if (currentIndex <= 0) {
+      currentIndex = 0;
+      return;
+    }
+
+    if (currentIndex > currentStartIndex) {
+      const prevLink = linkArray[currentIndex - currentStartIndex];
+      prevLink.style.color = "inherit";
+      prevLink.parentElement.style.backgroundColor = "inherit";
+
+      if (currentIndex > 0) {
+        currentIndex--;
+      }
+
+      const nextLink = linkArray[currentIndex - currentStartIndex];
+      nextLink.style.color = activeFontColor;
+      nextLink.parentElement.style.backgroundColor = activeBackgroundColor;
+    } else {
+      currentIndex--;
+      setList(keyword, currentStartIndex - 1);
     }
   },
   setTestList: (keyword) => {
@@ -82,20 +165,14 @@ module.exports = {
       return;
     }
 
-    startIndex = 0; 
-    endIndex = (testList.size < displayCount)? destList.size - 1: displayCount - 1; 
-    const array = filteringList(testList, "");
-    let elm = listBox.firstElementChild;
-    for(var i = startIndex; i <= endIndex; i++) {
-      const item = array[i];
-      const link = elm.firstElementChild;
-      link.href = item.url;
-      link.innerHTML = item.keyword;
-      elm = elm.nextElementSibling;
+    currentItemList = testList;
+    setList(keyword, 0);
+    currentIndex = currentStartIndex;
+
+    if (currentItemList.size > 0) {
+      const link = linkArray[0];
+      link.style.color = activeFontColor;
+      link.parentElement.style.backgroundColor = activeBackgroundColor;
     }
-
-    currentIndex = startIndex;
-
-    return testList;
   }
 }

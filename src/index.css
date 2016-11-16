@@ -2,7 +2,7 @@
   margin: 0px;
   padding: 0px;
   font-size: 1em;
-  color: #333333;
+  color: #565656;
   border-width: 0em;
 }
 
@@ -125,11 +125,16 @@ body {
 
 #listBox li {
   height: 1em;
+  background-color: inherit;
 }
 
 #listBox li a {
   text-decoration: none;
   white-space: nowrap;
+}
+
+#listBox li a span {
+  color: inherit;
 }
 
 
@@ -150,8 +155,3 @@ body {
   flex-grow: 1;
   margin: 0em 0.2em 0em 0.2em;
 }
-
-.activeListItem { background-color: #5d91c6; }
-.activeListItemLink { color: #f7f7f7; }
-.inactiveListItem { background-color: transparent; }
-.inactiveListItemLink { color: #565656; }
