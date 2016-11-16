@@ -22,31 +22,57 @@ function createWindow() {
     win = null;
   });
 
-  globalShortcut.register("Control+H", () => {
+  win.on("focus", () => {
+    console.log("BrowserWindow.focus");
+    globalShourtcutRegister();
+  });
+
+  win.on("blur", () => {
+    console.log("BrowserWindow.blur");
+    globalShortcut.unregisterAll();
+  });
+}
+
+function globalShourtcutRegister() {
+  let ret = false;
+
+  ret = globalShortcut.register("Control+H", () => {
     const event = {
       type: "keyDown",
       keyCode: "Backspace"
     };
     win.webContents.sendInputEvent(event);
   });
+  if (!ret) {
+    console.log("Registration global short cut failed");
+    return;
+  }
 
-  globalShortcut.register("Control+M", () => {
+  ret = globalShortcut.register("Control+M", () => {
     const event = {
       type: "char",
       keyCode: "\u000d"
     };
     win.webContents.sendInputEvent(event);
   });
+  if (!ret) {
+    console.log("Registration global short cut failed");
+    return;
+  }
 
-  globalShortcut.register("Control+I", () => {
+  ret = globalShortcut.register("Control+I", () => {
     const event = {
       type: "keyDown",
       keyCode: "Tab"
     };
     win.webContents.sendInputEvent(event);
   });
+  if (!ret) {
+    console.log("Registration global short cut failed");
+    return;
+  }
 
-  globalShortcut.register("Control+[", () => {
+  ret = globalShortcut.register("Control+[", () => {
     // TODO: Does not react.
     const event = {
       type: "keyDown",
@@ -54,18 +80,30 @@ function createWindow() {
     };
     win.webContents.sendInputEvent(event);
   });
+  if (!ret) {
+    console.log("Registration global short cut failed");
+    return;
+  }
 
-  globalShortcut.register("Control+N", () => {
+  ret = globalShortcut.register("Control+N", () => {
     win.webContents.send(
         webViewCtl.channel, 
         webViewCtl.nextActionMessage);
   });
+  if (!ret) {
+    console.log("Registration global short cut failed");
+    return;
+  }
 
-  globalShortcut.register("Control+P", () => {
+  ret = globalShortcut.register("Control+P", () => {
     win.webContents.send(
         webViewCtl.channel, 
         webViewCtl.previewActionMessage);
   });
+  if (!ret) {
+    console.log("Registration global short cut failed");
+    return;
+  }
 }
 
 app.on("ready", createWindow);
@@ -74,6 +112,11 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
   }
+});
+
+app.on("will-quit", () => {
+  console.log("app.will-quit");
+  globalShortcut.unregisterAll();
 });
 
 app.on("activate", () => {
