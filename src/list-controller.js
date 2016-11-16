@@ -10,7 +10,6 @@ class ListItem {
   }
 
   constructor(args) {
-    this.index = args.index;
     this.text = args.text;
     this.url = args.url;
     this.keyword = this.text + " " + this.url;
@@ -18,35 +17,35 @@ class ListItem {
 }
 
 const testList = Immutable.List.of(
-      new ListItem({ index: 0, text: "Google", url: "https://www.google.com" }),
-      new ListItem({ index: 1, text: "Apple", url: "http://www.apple.com" }),
-      new ListItem({ index: 2, text: "GitHub", url: "https://github.com" }),
-      new ListItem({ index: 3, text: "Twitter", url: "https://twitter.com" }),
-      new ListItem({ index: 4, text: "GitHub Gist", url: "https://gist.github.com" }),
-      new ListItem({ index: 5, text: "Docker", url: "https://www.docker.com/" }),
-      new ListItem({ index: 6, text: "The Scala Programming Langage", url: "http://www.scala-lang.org" }),
-      new ListItem({ index: 7, text: "Mozilla Developer Network", url: "https://developer.mozilla.org/en-US" }),
-      new ListItem({ index: 8, text: "CodePen", url: "https://codepen.io/" }),
-      new ListItem({ index: 9, text: "Electron", url: "http://electron.atom.io/" }),
-      new ListItem({ index: 10, text: "npm", url: "https://www.npmjs.com/" }),
-      new ListItem({ index: 11, text: "Arch Linux", url: "https://www.archlinux.org/" }),
-      new ListItem({ index: 12, text: "ArchWiki", url: "https://wiki.archlinux.org/" }),
-      new ListItem({ index: 13, text: "AUR (en) - Home", url: "https://aur.archlinux.org/" }),
-      new ListItem({ index: 14, text: "Travis CI - Test and Deploy Your Code with Confidence", url: "https://travis-ci.org/getting_started" }),
-      new ListItem({ index: 15, text: "terminal.sexy - Terminal Color Scheme Designer", url: "http://terminal.sexy/" }),
-      new ListItem({ index: 16, text: "Newest - Vim Colors", url: "http://vimcolors.com/" }),
-      new ListItem({ index: 17, text: "Home Neovim", url: "https://neovim.io/" }),
-      new ListItem({ index: 18, text: "tmux", url: "https://tmux.github.io/" }),
-      new ListItem({ index: 19, text: "sbt The interactive build tool", url: "http://www.scala-sbt.org/" })
+      new ListItem({ text: "Google", url: "https://www.google.com" }),
+      new ListItem({ text: "Apple", url: "http://www.apple.com" }),
+      new ListItem({ text: "GitHub", url: "https://github.com" }),
+      new ListItem({ text: "Twitter", url: "https://twitter.com" }),
+      new ListItem({ text: "GitHub Gist", url: "https://gist.github.com" }),
+      new ListItem({ text: "Docker", url: "https://www.docker.com/" }),
+      new ListItem({ text: "The Scala Programming Langage", url: "http://www.scala-lang.org" }),
+      new ListItem({ text: "Mozilla Developer Network", url: "https://developer.mozilla.org/en-US" }),
+      new ListItem({ text: "CodePen", url: "https://codepen.io/" }),
+      new ListItem({ text: "Electron", url: "http://electron.atom.io/" }),
+      new ListItem({ text: "npm", url: "https://www.npmjs.com/" }),
+      new ListItem({ text: "Arch Linux", url: "https://www.archlinux.org/" }),
+      new ListItem({ text: "ArchWiki", url: "https://wiki.archlinux.org/" }),
+      new ListItem({ text: "AUR (en) - Home", url: "https://aur.archlinux.org/" }),
+      new ListItem({ text: "Travis CI - Test and Deploy Your Code with Confidence", url: "https://travis-ci.org/getting_started" }),
+      new ListItem({ text: "terminal.sexy - Terminal Color Scheme Designer", url: "http://terminal.sexy/" }),
+      new ListItem({ text: "Newest - Vim Colors", url: "http://vimcolors.com/" }),
+      new ListItem({ text: "Home Neovim", url: "https://neovim.io/" }),
+      new ListItem({ text: "tmux", url: "https://tmux.github.io/" }),
+      new ListItem({ text: "sbt The interactive build tool", url: "http://www.scala-sbt.org/" })
     );
 
-console.log(testList.first().text);
-console.log(testList.last().url);
-console.log(testList.filter(a => a.text.indexOf("rc") > -1).last().text)
-console.log(Immutable.Range(3, 8).toArray())
-for (const i of Immutable.Range(3, 8)) {
-  console.log(i);
-}
+// console.log(testList.first().text);
+// console.log(testList.last().url);
+// console.log(testList.filter(a => a.text.indexOf("rc") > -1).last().text)
+// console.log(Immutable.Range(3, 8).toArray())
+// for (const i of Immutable.Range(3, 8)) {
+  // console.log(i);
+// }
 
 const activeBackgroundColor = "#5d91c6";
 const activeFontColor = "#f7f7f7";
@@ -54,42 +53,60 @@ const activeFontColor = "#f7f7f7";
 let listBox = null;
 let linkArray = [];
 let displayCount = 0;
-let currentItemList = Immutable.List();
+let currentSourceList = null;
+let currentFilteringList = null;
 let currentKeyword = "";
 let currentIndex = 0;
 let currentStartIndex = 0;
-let currentEndIndex = 0;
 
-function filteringList(list, keyword, startIndex, endIndex) {
+function filtering(list, keyword) {
   if (stringUtil.isEmpty(keyword)) {
-    return list.filter(a =>
-        startIndex <= a.index &&
-        a.index <= endIndex).toArray();
+    return list;
   } else {
-    return list.filter(a =>
-        a.text.indexOf(keyword) > -1 &&
-        startIndex <= a.index &&
-        a.index <= endIndex).toArray();
+    const re = new RegExp(".*" + keyword + ".*");
+    return list.filter(a => re.test(a.keyword));
   }
 }
 
-function setList(keyword, startIndex) {
-  currentStartIndex = startIndex; 
-  currentEndIndex = (currentItemList.size < displayCount)?
-    currentItemList.size - 1:
-    currentStartIndex + displayCount - 1; 
-  const itemArray = filteringList(currentItemList, keyword, currentStartIndex, currentEndIndex);
+function setList(list, keyword, startIndex) {
+
   for (const i of Array.from(Array(displayCount).keys())) {
-    const item = itemArray[i];
+    const link = linkArray[i];
+    link.href = "";
+    link.innerHTML = "";
+  }
+
+  const filteringList = filtering(list, keyword);
+  const count = (filteringList.size <= displayCount)? filteringList.size: displayCount;
+  for (const i of Array.from(Array(count).keys())) {
+    const item = filteringList.get(i + startIndex);
     const link = linkArray[i];
     link.href = item.url;
     link.innerHTML = item.keyword;
   }
+
+  return filteringList;
+}
+
+function setActiveColor(index) {
+  for (const i of Array.from(Array(displayCount).keys())) {
+    const link = linkArray[i];
+    link.style.color = "inherit";
+    link.parentElement.style.backgroundColor = "inherit";
+  }
+
+  if (currentFilteringList.size < 1) {
+    return;
+  }
+
+  const link = linkArray[index];
+  link.style.color = activeFontColor;
+  link.parentElement.style.backgroundColor = activeBackgroundColor;
 }
 
 module.exports = {
   init: (document, count) => {
-    if (listBox != null) {
+    if (listBox) {
       return;
     }
 
@@ -107,34 +124,33 @@ module.exports = {
     }
   },
   next: (keyword) => {
-    if (listBox == null) {
+    if (!listBox || !currentFilteringList) {
       return;
     }
 
-    if (currentIndex >= currentItemList.size - 1) {
-      currentIndex = currentItemList.size - 1;
+    if (currentIndex >= currentFilteringList.size - 1) {
+      currentIndex = currentFilteringList.size - 1;
       return;
     }
 
-    if (currentIndex < currentEndIndex) {
-      const prevLink = linkArray[currentIndex - currentStartIndex];
-      prevLink.style.color = "inherit";
-      prevLink.parentElement.style.backgroundColor = "inherit";
-
-      if (currentIndex < testList.size - 1) {
-        currentIndex++;
+    const endIndex = currentStartIndex + displayCount - 1;
+    if (currentIndex < endIndex) {
+      const nextLink = linkArray[currentIndex + 1 - currentStartIndex];
+      if (stringUtil.isEmpty(nextLink.href)) {
+        return;
       }
 
-      const nextLink = linkArray[currentIndex - currentStartIndex];
-      nextLink.style.color = activeFontColor;
-      nextLink.parentElement.style.backgroundColor = activeBackgroundColor;
+      currentIndex++;
+      setActiveColor(currentIndex - currentStartIndex);
     } else {
       currentIndex++;
-      setList(keyword, currentStartIndex + 1);
+      currentStartIndex++;
+      currentFilteringList = setList(currentFilteringList, keyword, currentStartIndex);
+      setActiveColor(currentIndex - currentStartIndex);
     }
   },
   preview: (keyword) => {
-    if (listBox == null) {
+    if (!listBox || !currentFilteringList) {
       return;
     }
 
@@ -144,35 +160,34 @@ module.exports = {
     }
 
     if (currentIndex > currentStartIndex) {
-      const prevLink = linkArray[currentIndex - currentStartIndex];
-      prevLink.style.color = "inherit";
-      prevLink.parentElement.style.backgroundColor = "inherit";
-
-      if (currentIndex > 0) {
-        currentIndex--;
-      }
-
-      const nextLink = linkArray[currentIndex - currentStartIndex];
-      nextLink.style.color = activeFontColor;
-      nextLink.parentElement.style.backgroundColor = activeBackgroundColor;
+      currentIndex--;
+      setActiveColor(currentIndex - currentStartIndex);
     } else {
       currentIndex--;
-      setList(keyword, currentStartIndex - 1);
+      currentStartIndex--;
+      currentFilteringList = setList(currentFilteringList, keyword, currentStartIndex);
+      setActiveColor(currentIndex - currentStartIndex);
     }
   },
-  setTestList: (keyword) => {
-    if (listBox == null) {
+  filter: (keyword) => {
+    if (!listBox || !currentSourceList) {
       return;
     }
 
-    currentItemList = testList;
-    setList(keyword, 0);
-    currentIndex = currentStartIndex;
-
-    if (currentItemList.size > 0) {
-      const link = linkArray[0];
-      link.style.color = activeFontColor;
-      link.parentElement.style.backgroundColor = activeBackgroundColor;
+    currentStartIndex = 0;
+    currentIndex = 0;
+    currentFilteringList = setList(currentSourceList, keyword, currentStartIndex);
+    setActiveColor(0);
+  },
+  setTestList: (keyword) => {
+    if (!listBox) {
+      return;
     }
+
+    currentSourceList = testList;
+    currentStartIndex = 0;
+    currentIndex = 0;
+    currentFilteringList = setList(currentSourceList, keyword, currentStartIndex);
+    setActiveColor(0);
   }
 }
