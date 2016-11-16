@@ -24,7 +24,7 @@ function createWindow() {
 
   win.on("focus", () => {
     console.log("BrowserWindow.focus");
-    globalShourtcutRegister();
+    globalShortcutRegister();
   });
 
   win.on("blur", () => {
@@ -33,7 +33,7 @@ function createWindow() {
   });
 }
 
-function globalShourtcutRegister() {
+function globalShortcutRegister() {
   let ret = false;
 
   ret = globalShortcut.register("Control+H", () => {
