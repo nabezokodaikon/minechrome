@@ -6,7 +6,6 @@ const path = require("path");
 const url = require("url");
 const win = remote.getCurrentWindow();
 const stringUtil = require("./string-util.js");
-const webViewCtl = require("./webview-controller.js");
 const modeManager = require("./mode-manager.js");
 const listKeystroke = require("./list-keystroke.js");
 const listController = require("./list-controller.js");
@@ -289,22 +288,6 @@ window.addEventListener("load", (e) => {
   webView.addEventListener("dom-ready", onReady, false);
 }, false);
 
-
-// Global key down event.
-ipcRenderer.on(webViewCtl.channel, (e, message) => {
-  console.log("global.keydown: " + message);
-  switch (message) {
-    case webViewCtl.nextActionMessage:
-      modeManager.next();
-      return;
-    case webViewCtl.previewActionMessage:
-      modeManager.preview();
-      return;
-    default:
-      return;
-  }
-});
-
 // Document key down event.
 document.addEventListener("keydown", (e) => {
   console.log("document.keydown: " + e.code);
@@ -343,6 +326,14 @@ document.addEventListener("keydown", (e) => {
     case "KeyS":
       e.preventDefault();
       modeManager.enterSearchMode();
+      return;
+    case "KeyN":
+      e.preventDefault();
+      modeManager.next();
+      return;
+    case "KeyP":
+      e.preventDefault();
+      modeManager.preview();
       return;
     default:
       return;

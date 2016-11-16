@@ -3,35 +3,8 @@
 const {app, BrowserWindow, globalShortcut} = require("electron");
 const path = require("path");
 const url = require("url");
-const webViewCtl = require("./webview-controller.js");
 
 let win = null;
-
-function createWindow() {
-  win = new BrowserWindow({width: 1280, height: 800});
-  win.setAutoHideMenuBar(true);
-  win.setMenuBarVisibility(false);
-
-  win.loadURL(url.format({
-    pathname: path.join(__dirname, "index.html"),
-    protocol: "file:",
-    slashes: true
-  }));
-
-  win.on("closed", () => {
-    win = null;
-  });
-
-  win.on("focus", () => {
-    console.log("BrowserWindow.focus");
-    globalShortcutRegister();
-  });
-
-  win.on("blur", () => {
-    console.log("BrowserWindow.blur");
-    globalShortcut.unregisterAll();
-  });
-}
 
 function globalShortcutRegister() {
   let ret = false;
@@ -84,26 +57,32 @@ function globalShortcutRegister() {
     console.log("Registration global short cut failed");
     return;
   }
+}
 
-  ret = globalShortcut.register("Control+N", () => {
-    win.webContents.send(
-        webViewCtl.channel, 
-        webViewCtl.nextActionMessage);
-  });
-  if (!ret) {
-    console.log("Registration global short cut failed");
-    return;
-  }
+function createWindow() {
+  win = new BrowserWindow({width: 1280, height: 800});
+  win.setAutoHideMenuBar(true);
+  win.setMenuBarVisibility(false);
 
-  ret = globalShortcut.register("Control+P", () => {
-    win.webContents.send(
-        webViewCtl.channel, 
-        webViewCtl.previewActionMessage);
+  win.loadURL(url.format({
+    pathname: path.join(__dirname, "index.html"),
+    protocol: "file:",
+    slashes: true
+  }));
+
+  win.on("closed", () => {
+    win = null;
   });
-  if (!ret) {
-    console.log("Registration global short cut failed");
-    return;
-  }
+
+  win.on("focus", () => {
+    console.log("BrowserWindow.focus");
+    globalShortcutRegister();
+  });
+
+  win.on("blur", () => {
+    console.log("BrowserWindow.blur");
+    globalShortcut.unregisterAll();
+  });
 }
 
 app.on("ready", createWindow);
