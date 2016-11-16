@@ -4,11 +4,6 @@ const Immutable = require("immutable");
 const stringUtil = require("./string-util.js");
 
 class ListItem {
-
-  static empty() {
-    new ListItem();
-  }
-
   constructor(args) {
     this.text = args.text;
     this.url = args.url;
