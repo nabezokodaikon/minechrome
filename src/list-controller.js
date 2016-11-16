@@ -113,6 +113,7 @@ module.exports = {
       const link = document.createElement("a");
       link.href = "";
       link.innerHTML = "*";
+      link.setAttribute("disabled", "disabled");
       item.appendChild(link);
       listBox.appendChild(item);
       linkArray.push(link);

@@ -131,6 +131,7 @@ body {
 #listBox li a {
   text-decoration: none;
   white-space: nowrap;
+  pointer-events: none;
 }
 
 #listBox li a span {
