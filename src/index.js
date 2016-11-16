@@ -10,7 +10,7 @@ const webViewCtl = require("./webview-controller.js");
 const modeManager = require("./mode-manager.js");
 const listKeystroke = require("./list-keystroke.js");
 const listController = require("./list-controller.js");
-const listDisplayCount = 16;
+const listDisplayCount = 8;
 
 // Regist on mode manage.
 modeManager.registBrowseAction({
@@ -172,7 +172,7 @@ function listModePreviewAction() {
 
 function HistoryListDisplayAction() {
   // TODO: Required implementation.
-  listController.setTestList("");
+  listController.setTestList(listItemFindInput.value);
   modeManager.enterListMode();
 }
 
@@ -193,6 +193,8 @@ function searchByKeyword(keyword) {
 
 function onReady() {
   console.log("webView.dom-ready");
+
+  listController.init(document, listDisplayCount);
 
   addressInput.addEventListener("focus", (e) => {
     modeManager.enterSearchMode();
@@ -245,11 +247,27 @@ function onReady() {
     modeManager.next();
   }, false);
 
+  listItemFindInput.addEventListener("keypress", (e) => {
+    switch (e.code) {
+      case "Enter":
+        e.preventDefault();
+        const url = listController.get();
+        if (stringUtil.isEmpty(url)) {
+          return;
+        }
+
+        addressInput.value = url;
+        modeManager.enterSearchMode();
+        modeManager.do();
+        return;
+      default:
+        return;
+    }
+  }, false);
+
   listItemFindInput.addEventListener("input", (e) => {
     modeManager.do();
   }, false);
-
-  listController.init(document, listDisplayCount);
 
   // First action.
   modeManager.enterSearchMode();

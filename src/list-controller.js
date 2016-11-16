@@ -174,6 +174,15 @@ module.exports = {
     currentFilteringList = setList(currentSourceList, keyword, currentStartIndex);
     setActiveColor(0);
   },
+  get: () => {
+    if (currentFilteringList.size < 1) {
+      return "";
+    }
+
+    const index = currentIndex - currentStartIndex;
+    const link = linkArray[index];
+    return link.href;
+  },
   setTestList: (keyword) => {
     if (!listBox) {
       return;
