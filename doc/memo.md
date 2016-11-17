@@ -9,6 +9,17 @@
 * 右クリックメニューを使用しない。
 
 
+## npm
+### 参考
+* [npmでnode.jsのpackageを管理する](http://qiita.com/sinmetal/items/395edf1d195382cfd8bc)
+
+### 外部ライブラリの導入方法
+```
+$ cd src
+$ npm install --save-dev nedb 
+```
+
+
 ## Mode
 ### Browse mode
 普通にWebを見るモード。
