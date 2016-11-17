@@ -16,5 +16,8 @@ module.exports = {
   },
   isURL: function(str) {
      return urlRegExp.test(str);
+  },
+  toFunctionString: (func) => {
+    return "(" + func.toString() + ")();";
   }
 }
