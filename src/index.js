@@ -63,11 +63,19 @@ function browseModeDoAction() {
 }
 
 function browseModeNextAction() {
-  webView.goToOffset(1);
+  if (!webView.canGoForward()) {
+    return;
+  }
+
+  webView.goForward();
 }
 
 function browseModePreviewAction() {
-  webView.goToOffset(-1);
+  if (!webView.canGoBack()) {
+    return;
+  }
+
+  webView.goBack();
 }
 
 function searchModeEnterAction() {
