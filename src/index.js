@@ -177,14 +177,13 @@ function listModePreviewAction() {
 }
 
 function HistoryListDisplayAction() {
-  // TODO: Required implementation.
-  listController.setTestList(listItemFindInput.value);
+  listController.loadHistory(listItemFindInput.value);
   modeManager.enterListMode();
 }
 
 function BookmarkListDisplayAction() {
   // TODO: Required implementation.
-  modeManager.enterListMode();
+  // modeManager.enterListMode();
 }
 
 function searchByKeyword(keyword) {

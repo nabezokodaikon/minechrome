@@ -5,60 +5,10 @@ const Immutable = require("immutable");
 const Datastore = require("nedb");
 const stringUtil = require("./string-util.js");
 
-class ListItem {
-  constructor(args) {
-    this.text = args.text;
-    this.url = args.url;
-    this.keyword = this.text + " " + this.url;
-  }
-}
-
-const testList = Immutable.List.of(
-      new ListItem({ text: "Google", url: "https://www.google.com" }),
-      new ListItem({ text: "Apple", url: "http://www.apple.com" }),
-      new ListItem({ text: "GitHub", url: "https://github.com" }),
-      new ListItem({ text: "Twitter", url: "https://twitter.com" }),
-      new ListItem({ text: "GitHub Gist", url: "https://gist.github.com" }),
-      new ListItem({ text: "Docker", url: "https://www.docker.com/" }),
-      new ListItem({ text: "The Scala Programming Langage", url: "http://www.scala-lang.org" }),
-      new ListItem({ text: "Mozilla Developer Network", url: "https://developer.mozilla.org/en-US" }),
-      new ListItem({ text: "CodePen", url: "https://codepen.io/" }),
-      new ListItem({ text: "Electron", url: "http://electron.atom.io/" }),
-      new ListItem({ text: "npm", url: "https://www.npmjs.com/" }),
-      new ListItem({ text: "Arch Linux", url: "https://www.archlinux.org/" }),
-      new ListItem({ text: "ArchWiki", url: "https://wiki.archlinux.org/" }),
-      new ListItem({ text: "AUR (en) - Home", url: "https://aur.archlinux.org/" }),
-      new ListItem({ text: "Travis CI - Test and Deploy Your Code with Confidence", url: "https://travis-ci.org/getting_started" }),
-      new ListItem({ text: "terminal.sexy - Terminal Color Scheme Designer", url: "http://terminal.sexy/" }),
-      new ListItem({ text: "Newest - Vim Colors", url: "http://vimcolors.com/" }),
-      new ListItem({ text: "Home Neovim", url: "https://neovim.io/" }),
-      new ListItem({ text: "tmux", url: "https://tmux.github.io/" }),
-      new ListItem({ text: "sbt The interactive build tool", url: "http://www.scala-sbt.org/" })
-    );
-
-// console.log(testList.first().text);
-// console.log(testList.last().url);
-// console.log(testList.filter(a => a.text.indexOf("rc") > -1).last().text)
-// console.log(Immutable.Range(3, 8).toArray())
-// for (const i of Immutable.Range(3, 8)) {
-  // console.log(i);
-// }
-
-
-class ListItem2 {
-  constructor(args) {
-    this.url = args.url;
-    this.date = args.date;
-    this.title = args.title;
-    this.tag = args.tag;
-    this.keyword = this.keyword;
-  }
-}
-
+// TODO: Will get values from config file.
 const activeBackgroundColor = "#5d91c6";
 const activeFontColor = "#f7f7f7";
-// TODO: Will get values from config file.
-const displayCount = 0;
+const displayCount = 8;
 const historyDB = new Datastore({ filename: path.join(__dirname, "db/minechrome-history.db") });
 historyDB.loadDatabase((err) => {
   if (err) {
@@ -68,26 +18,40 @@ historyDB.loadDatabase((err) => {
 
 let listBox = null;
 let linkArray = [];
-let currentSourceList = null;
-let currentFilteringList = null;
-let currentKeyword = "";
+let currentDB = null;
+let currentFilteringDocs = null;
 let currentIndex = 0;
 let currentStartIndex = 0;
 
-function filtering(list, keyword) {
+function filtering(db, keyword, callback) {
   if (stringUtil.isEmpty(keyword)) {
-    return list;
+    db.find({ $and: [ { keyword: { $regex: /.*/ } } ] }).sort({ date: -1 }).exec((err, docs) => {
+      if (err) {
+        console.log("filtering failed: " + err);
+        return;
+      }
+
+      callback(docs);
+    });
   } else {
-    const re = new RegExp(".*" + keyword + ".*");
-    return list.filter(a => re.test(a.keyword));
+    const keywordArray = keyword.split(" ");
+    const keywordSeq = Immutable.Seq(keywordArray);
+    const keywordQuery = keywordSeq.map(a => {
+      return { keyword: { $regex: new RegExp(a) } };
+    }).toArray();
+
+    db.find({ $and: keywordQuery }).sort({ date: -1 }).exec((err, docs) => {
+      if (err) {
+        console.log("filtering failed: " + err);
+        return;
+      }
+
+      callback(docs);
+    });
   }
 }
 
-function filtering2(db, keyword) {
-  const keywords = keyword.split(" ");  
-}
-
-function setList(list, keyword, startIndex) {
+function setList(db, keyword, startIndex, callback) {
 
   for (const i of Array.from(Array(displayCount).keys())) {
     const link = linkArray[i];
@@ -95,16 +59,17 @@ function setList(list, keyword, startIndex) {
     link.innerHTML = "";
   }
 
-  const filteringList = filtering(list, keyword);
-  const count = (filteringList.size <= displayCount)? filteringList.size: displayCount;
-  for (const i of Array.from(Array(count).keys())) {
-    const item = filteringList.get(i + startIndex);
-    const link = linkArray[i];
-    link.href = item.url;
-    link.innerHTML = item.keyword;
-  }
+  filtering(db, keyword, (docs) => {
+    const count = ((docs.length <= displayCount) ? docs.length : displayCount);
+    for (const i of Array.from(Array(count).keys())) {
+      const item = docs[i + startIndex];
+      const link = linkArray[i];
+      link.href = item.url;
+      link.innerHTML = item.keyword;
+    }
 
-  return filteringList;
+    callback(docs);
+  });
 }
 
 function setActiveColor(index) {
@@ -114,7 +79,7 @@ function setActiveColor(index) {
     link.parentElement.style.backgroundColor = "inherit";
   }
 
-  if (currentFilteringList.size < 1) {
+  if (currentFilteringDocs.length < 1) {
     return;
   }
 
@@ -143,12 +108,12 @@ module.exports = {
     }
   },
   next: (keyword) => {
-    if (!listBox || !currentFilteringList) {
+    if (!listBox || !currentFilteringDocs) {
       return;
     }
 
-    if (currentIndex >= currentFilteringList.size - 1) {
-      currentIndex = currentFilteringList.size - 1;
+    if (currentIndex >= currentFilteringDocs.length - 1) {
+      currentIndex = currentFilteringDocs.length - 1;
       return;
     }
 
@@ -164,12 +129,14 @@ module.exports = {
     } else {
       currentIndex++;
       currentStartIndex++;
-      currentFilteringList = setList(currentFilteringList, keyword, currentStartIndex);
-      setActiveColor(currentIndex - currentStartIndex);
+      setList(currentDB, keyword, currentStartIndex, (docs) => {
+        currentFilteringDocs = docs;
+        setActiveColor(currentIndex - currentStartIndex);
+      });
     }
   },
   preview: (keyword) => {
-    if (!listBox || !currentFilteringList) {
+    if (!listBox || !currentFilteringDocs) {
       return;
     }
 
@@ -184,22 +151,27 @@ module.exports = {
     } else {
       currentIndex--;
       currentStartIndex--;
-      currentFilteringList = setList(currentFilteringList, keyword, currentStartIndex);
-      setActiveColor(currentIndex - currentStartIndex);
+      setList(currentDB, keyword, currentStartIndex, (docs) => {
+        currentFilteringDocs = docs;
+        setActiveColor(currentIndex - currentStartIndex);
+      });
     }
   },
   filter: (keyword) => {
-    if (!listBox || !currentSourceList) {
+    if (!listBox || !currentDB) {
       return;
     }
 
     currentStartIndex = 0;
     currentIndex = 0;
-    currentFilteringList = setList(currentSourceList, keyword, currentStartIndex);
-    setActiveColor(0);
+
+    setList(currentDB, keyword, currentStartIndex, (docs) => {
+      currentFilteringDocs = docs;
+      setActiveColor(0);
+    });
   },
   get: () => {
-    if (currentFilteringList.size < 1) {
+    if (currentFilteringDocs.length < 1) {
       return "";
     }
 
@@ -226,16 +198,13 @@ module.exports = {
     if (!listBox) {
       return;
     }
-  },
-  setTestList: (keyword) => {
-    if (!listBox) {
-      return;
-    }
 
-    currentSourceList = testList;
+    currentDB = historyDB;
     currentStartIndex = 0;
     currentIndex = 0;
-    currentFilteringList = setList(currentSourceList, keyword, currentStartIndex);
-    setActiveColor(0);
+    setList(currentDB, keyword, currentStartIndex, (docs) => {
+      currentFilteringDocs = docs;
+      setActiveColor(0);
+    });
   }
 }
