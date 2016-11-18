@@ -3,6 +3,7 @@
 const path = require("path");
 const fs = require("fs");
 const Datastore = require("nedb");
+const Immutable = require("immutable");
 
 function historyTest() {
   const dbFile = path.join(__dirname, "db/minechrome-history.db");
@@ -104,6 +105,13 @@ function historyTest() {
 
     console.log(docs);
   });
+
+  const keywords = ["hoge", "foo"];
+  
+
+
+
+  
 
   return;
   db.findOne(

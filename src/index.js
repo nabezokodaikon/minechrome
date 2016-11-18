@@ -9,7 +9,6 @@ const stringUtil = require("./string-util.js");
 const modeManager = require("./mode-manager.js");
 const listKeystroke = require("./list-keystroke.js");
 const listController = require("./list-controller.js");
-const listDisplayCount = 8;
 
 // Regist on mode manage.
 modeManager.registBrowseAction({
@@ -201,7 +200,7 @@ function searchByKeyword(keyword) {
 function onReady() {
   console.log("webView.dom-ready");
 
-  listController.init(document, listDisplayCount);
+  listController.init(document);
 
   addressInput.addEventListener("focus", (e) => {
     modeManager.enterSearchMode();
@@ -215,7 +214,6 @@ function onReady() {
     modeManager.enterBrowseMode();
   }, false);
 
-  // Hook the new window event.
   webView.addEventListener("new-window", (e) => {
     console.log("webview.new-window.url: " + e.url);
     webView.loadURL(e.url);
@@ -225,6 +223,19 @@ function onReady() {
     console.log("webview.did-navigate.url: " + e.url);
     addressInput.value = e.url;
     modeManager.enterBrowseMode();
+  }, false);
+
+  webView.addEventListener("page-title-updated", (e) => {
+    if (!e.explicitSet) {
+      return;
+    }
+
+    if (stringUtil.isURL(e.title)) {
+      return;
+    }
+
+    console.log("webView.page-title-updated: " + e.title + ", " + webView.getURL() + ", " + e.explicitSet);
+    listController.addHistory({ url: webView.getURL(), title: e.title });
   }, false);
 
   addressInput.addEventListener("keypress", (e) => {

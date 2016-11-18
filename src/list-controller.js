@@ -1,6 +1,8 @@
 "use strict"
 
+const path = require("path");
 const Immutable = require("immutable");
+const Datastore = require("nedb");
 const stringUtil = require("./string-util.js");
 
 class ListItem {
@@ -42,12 +44,30 @@ const testList = Immutable.List.of(
   // console.log(i);
 // }
 
+
+class ListItem2 {
+  constructor(args) {
+    this.url = args.url;
+    this.date = args.date;
+    this.title = args.title;
+    this.tag = args.tag;
+    this.keyword = this.keyword;
+  }
+}
+
 const activeBackgroundColor = "#5d91c6";
 const activeFontColor = "#f7f7f7";
+// TODO: Will get values from config file.
+const displayCount = 0;
+const historyDB = new Datastore({ filename: path.join(__dirname, "db/minechrome-history.db") });
+historyDB.loadDatabase((err) => {
+  if (err) {
+    console.log("DB load failed: %s", err);
+  } 
+});
 
 let listBox = null;
 let linkArray = [];
-let displayCount = 0;
 let currentSourceList = null;
 let currentFilteringList = null;
 let currentKeyword = "";
@@ -61,6 +81,10 @@ function filtering(list, keyword) {
     const re = new RegExp(".*" + keyword + ".*");
     return list.filter(a => re.test(a.keyword));
   }
+}
+
+function filtering2(db, keyword) {
+  const keywords = keyword.split(" ");  
 }
 
 function setList(list, keyword, startIndex) {
@@ -100,13 +124,12 @@ function setActiveColor(index) {
 }
 
 module.exports = {
-  init: (document, count) => {
+  init: (document) => {
     if (listBox) {
       return;
     }
 
     listBox = document.getElementById("listBox");
-    displayCount = count;
 
     for (const i of Array.from(Array(displayCount).keys())) {
       const item = document.createElement("li");
@@ -183,6 +206,26 @@ module.exports = {
     const index = currentIndex - currentStartIndex;
     const link = linkArray[index];
     return link.href;
+  },
+  addHistory: (args) => {
+    const date = Date.now();
+    const tag = (new Date(date)).toLocaleString();
+    const keyword = tag + " " + args.title + " " + args.url;
+
+    historyDB.update(
+        { url: args.url },
+        { url: args.url, title: args.title, date: date, tag: tag, keyword: keyword },
+        { upsert: true },
+        (err, numReplaced, upsert) => {
+          if (err) {
+            console.log("History upsert failed: " + err);
+          }
+        });    
+  },
+  loadHistory: (keyword) => {
+    if (!listBox) {
+      return;
+    }
   },
   setTestList: (keyword) => {
     if (!listBox) {
