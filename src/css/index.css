@@ -1,9 +1,8 @@
 * {
-  margin: 0px;
-  padding: 0px;
-  font-size: 1em;
+  margin: 0rem;
+  padding: 0rem;
+  border-width: 0rem;
   color: #565656;
-  border-width: 0em;
 }
 
 *:focus {
@@ -14,6 +13,7 @@ html,
 body {
   width: 100%;
   height: 100%;
+  font-size: 62.5%;
 }
 
 #container {
@@ -28,12 +28,12 @@ body {
 
 /* Header */
 #header {
-  flex-direction: column;
+  display: flex;
 
   background-color: #f7f7f7;
 
   border-style: solid;
-  border-width: 0em 0em 0.1em 0em;
+  border-width: 0rem 0rem 0.1rem 0rem;
   border-color: transparent transparent #aaaaaa transparent;
 }
 
@@ -41,47 +41,49 @@ body {
   display: flex;
   flex-grow: 1;
 
-  min-height: 1.4em;
-  margin: 0.2em;
+  min-height: 2.4rem;
+  margin: 0.4rem;
 
   border-style: solid;
-  border-width: 0.1em;
-  border-radius: 0.2em;
+  border-width: 0.1rem;
+  border-radius: 0.2rem;
   border-color: #cccccc;
 }
 
 #addressInput {
   flex-grow: 1;
-  margin: 0em 0.2em 0em 0.2em;
+  margin: 0rem 0.4rem 0rem 0.4rem;
+  font-size: 1.4rem;
 }
 
 #findTextBox {
   display: flex;
   justify-content: center;
 
-  min-width: 32px;
-  min-height: 1.6em;
+  min-width: 32rem;
+  min-height: 2.4rem;
 
   position: absolute;
-  top: 0.4em;
-  right: 0.4em;
+  top: 0.8rem;
+  right: 1rem;
 
   z-index: 1;
 
   background-color: #ffffff;
 
   border-style: solid;
-  border-width: 0.1em;
-  border-radius: 0.2em;
+  border-width: 0.1rem;
+  border-radius: 0.2rem;
   border-color: #cccccc;
-  box-shadow: 0.2em 0.2em 0.2em 0em rgba(0, 0, 0, 0.5);
+  box-shadow: 0.2rem 0.2rem 0.2rem 0rem rgba(0, 0, 0, 0.5);
 
   visibility: hidden;
 }
 
 #findTextInput {
   flex-grow: 1;
-  margin: 0em 0.2em 0em 0.2em;
+  margin: 0rem 0.4rem 0rem 0.4rem;
+  font-size: 1.4rem;
 }
 
 
@@ -99,9 +101,10 @@ body {
 
 /* Footer */
 #footer {
+  display: flex;
   flex-direction: column;
 
-  bottom: 0em;
+  bottom: 0rem;
   min-width: 100%;
 
   position: fixed;
@@ -111,7 +114,7 @@ body {
   background-color: #f7f7f7;
 
   border-style: solid;
-  border-width: 0.1em 0em 0em 0em;
+  border-width: 0.1rem 0rem 0rem 0rem;
   border-color: #aaaaaa transparent transparent transparent;
 
   visibility: hidden;
@@ -119,16 +122,21 @@ body {
 
 #listBox {
   flex-grow: 1;
-  margin: 0.2em;
+  margin: 0.2rem;
   list-style-type: none;
 }
 
 #listBox li {
-  height: 1em;
   background-color: inherit;
 }
 
 #listBox li a {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+
+  min-height: 2rem;
   text-decoration: none;
   white-space: nowrap;
   pointer-events: none;
@@ -136,23 +144,37 @@ body {
 
 #listBox li a span {
   color: inherit;
+  margin: 0.2rem;
+  font-size: 1.4rem;
+}
+
+#listBox li a span:nth-child(1) {
+  margin-right: 2em;
+}
+
+#listBox li a span:nth-child(2) {
+  margin-right: 4em;
+}
+
+#listBox li a span:nth-child(3) {
+  flex-grow: 2;
 }
 
 
 #listItemFindBox {
   display: flex;
-  flex-grow: 1;
 
-  min-height: 1.4em;
-  margin: 0.2em;
+  min-height: 2.4rem;
+  margin: 0.4rem;
 
   border-style: solid;
-  border-width: 0.1em;
-  border-radius: 0.2em;
+  border-width: 0.1rem;
+  border-radius: 0.2rem;
   border-color: #cccccc;
 }
 
 #listItemFindInput {
   flex-grow: 1;
-  margin: 0em 0.2em 0em 0.2em;
+  margin: 0rem 0.4rem 0rem 0.4rem;
+  font-size: 1.4rem;
 }
