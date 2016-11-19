@@ -4,13 +4,12 @@ const path = require("path");
 const Immutable = require("immutable");
 const Datastore = require("nedb");
 const stringUtil = require("./string-util.js");
+const config = require(path.join(path.resolve(""), "config.json"));
 
 const activeBackgroundColor = "#5d91c6";
 const activeFontColor = "#f7f7f7";
-
-// TODO: Will get values from config file.
-const displayCount = 8;
-const historyDB = new Datastore({ filename: path.join(__dirname, "../db/minechrome-history.db") });
+const displayCount = config.listDisplayCount;
+const historyDB = new Datastore(config.historyDatabaseFile);
 
 let listBox = null;
 let linkArray = [];
