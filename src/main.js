@@ -1,64 +1,12 @@
 "use strict";
 
-const {app, BrowserWindow, globalShortcut} = require("electron");
 const path = require("path");
 const url = require("url");
+const {app, BrowserWindow} = require("electron");
 const log = require("./js/app-config.js").getLogger();
+const globalShortcut = require("./js/global-shortcut.js");
 
 let win = null;
-
-function globalShortcutRegister() {
-  let ret = false;
-
-  ret = globalShortcut.register("Control+H", () => {
-    const event = {
-      type: "keyDown",
-      keyCode: "Backspace"
-    };
-    win.webContents.sendInputEvent(event);
-  });
-  if (!ret) {
-    console.log("Registration global short cut failed");
-    return;
-  }
-
-  ret = globalShortcut.register("Control+M", () => {
-    const event = {
-      type: "char",
-      keyCode: "\u000d"
-    };
-    win.webContents.sendInputEvent(event);
-  });
-  if (!ret) {
-    console.log("Registration global short cut failed");
-    return;
-  }
-
-  ret = globalShortcut.register("Control+I", () => {
-    const event = {
-      type: "keyDown",
-      keyCode: "Tab"
-    };
-    win.webContents.sendInputEvent(event);
-  });
-  if (!ret) {
-    console.log("Registration global short cut failed");
-    return;
-  }
-
-  ret = globalShortcut.register("Control+[", () => {
-    // TODO: Does not react.
-    const event = {
-      type: "keyDown",
-      keyCode: "Escape"
-    };
-    win.webContents.sendInputEvent(event);
-  });
-  if (!ret) {
-    console.log("Registration global short cut failed");
-    return;
-  }
-}
 
 function createWindow() {
   log.debug("app.ready");
@@ -79,13 +27,14 @@ function createWindow() {
   });
 
   win.on("focus", () => {
-    log.debug("BrowserWindow.focus");
-    globalShortcutRegister();
+    const ret = globalShortcut.regist(win);
+    if (!ret) {
+      log.error("Registration global short cut failed.");
+    }
   });
 
   win.on("blur", () => {
-    log.debug("BrowserWindow.blur");
-    globalShortcut.unregisterAll();
+    globalShortcut.unregist();
   });
 }
 
