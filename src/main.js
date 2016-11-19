@@ -61,7 +61,8 @@ function globalShortcutRegister() {
 }
 
 function createWindow() {
-  log.info("createWindow");
+  log.debug("app.ready");
+  log.debug("app dir: " + path.resolve(""));
 
   win = new BrowserWindow({width: 1280, height: 800});
   win.setAutoHideMenuBar(true);
@@ -78,12 +79,12 @@ function createWindow() {
   });
 
   win.on("focus", () => {
-    console.log("BrowserWindow.focus");
+    log.debug("BrowserWindow.focus");
     globalShortcutRegister();
   });
 
   win.on("blur", () => {
-    console.log("BrowserWindow.blur");
+    log.debug("BrowserWindow.blur");
     globalShortcut.unregisterAll();
   });
 }
@@ -97,7 +98,7 @@ app.on("window-all-closed", () => {
 });
 
 app.on("will-quit", () => {
-  console.log("app.will-quit");
+  log.debug("app.will-quit");
   globalShortcut.unregisterAll();
 });
 
