@@ -309,7 +309,7 @@ window.addEventListener("load", (e) => {
 
 // Document key down event.
 document.addEventListener("keydown", (e) => {
-  log.trace("document.keydown: " + e.code);
+  console.log("document.keydown: " + e.code);
 
   if (listKeystroke.push(e)) {
     e.preventDefault();
