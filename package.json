@@ -2,10 +2,11 @@
   "name": "minechrome",
   "version": "0.0.1",
   "description": "It is a mine Google Chrome for me only.",
-  "main": "main.js",
+  "main": "./src/main.js",
   "directories": {},
   "dependencies": {
-    "immutable": "^3.8.1"
+    "immutable": "^3.8.1",
+    "nedb": "^1.8.0"
   },
   "devDependencies": {
     "immutable": "^3.8.1",
