@@ -3,6 +3,7 @@
 const {app, BrowserWindow, globalShortcut} = require("electron");
 const path = require("path");
 const url = require("url");
+const log = require("./js/app-config.js").getLogger();
 
 let win = null;
 
@@ -60,6 +61,8 @@ function globalShortcutRegister() {
 }
 
 function createWindow() {
+  log.info("createWindow");
+
   win = new BrowserWindow({width: 1280, height: 800});
   win.setAutoHideMenuBar(true);
   win.setMenuBarVisibility(false);

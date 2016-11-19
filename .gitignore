@@ -1,5 +1,6 @@
 tags
 *.asar
 *.db
+logs/
 build/
 node_modules/

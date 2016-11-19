@@ -1,16 +1,15 @@
 "use strict"
 
 const path = require("path");
-const fs = require("fs");
 const Immutable = require("immutable");
 const Datastore = require("nedb");
+const appConfig = require("./app-config.js").getAppConfig();
 const stringUtil = require("./string-util.js");
 
 const activeBackgroundColor = "#5d91c6";
 const activeFontColor = "#f7f7f7";
-const config = JSON.parse(fs.readFileSync(path.join(path.resolve(""), "app-config.json")), "utf8");
-const displayCount = config.listDisplayCount;
-const historyDB = new Datastore(config.historyDatabaseFile);
+const displayCount = appConfig.listDisplayCount;
+const historyDB = new Datastore(appConfig.historyDatabaseFile);
 
 let listBox = null;
 let linkArray = [];

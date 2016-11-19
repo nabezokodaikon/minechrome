@@ -1,4 +1,17 @@
 {
+  "appenders": [
+    {
+      "type": "file",
+      "filename": "./logs/minechrome.log",
+      "maxLogSize": 20480,
+      "backups": 3,
+      "category": "default"
+    },
+    {
+      "type": "console",
+      "category": "default"
+    }
+  ],
   "historyDatabaseFile": "./minechrome-history.db",
   "listDisplayCount": 8
 }
