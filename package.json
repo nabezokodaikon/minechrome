@@ -6,6 +6,7 @@
   "directories": {},
   "dependencies": {
     "immutable": "^3.8.1",
+    "log4js": "^1.0.1",
     "nedb": "^1.8.0"
   },
   "devDependencies": {
