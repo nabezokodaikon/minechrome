@@ -10,7 +10,7 @@ const activeFontColor = "#f7f7f7";
 
 // TODO: Will get values from config file.
 const displayCount = 8;
-const historyDB = new Datastore({ filename: path.join(__dirname, "db/minechrome-history.db") });
+const historyDB = new Datastore({ filename: path.join(__dirname, "../db/minechrome-history.db") });
 
 let listBox = null;
 let linkArray = [];

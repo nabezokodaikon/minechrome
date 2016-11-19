@@ -5,10 +5,10 @@ const {Menu, MenuItem} = remote;
 const path = require("path");
 const url = require("url");
 const win = remote.getCurrentWindow();
-const stringUtil = require("./string-util.js");
-const modeManager = require("./mode-manager.js");
-const listKeystroke = require("./list-keystroke.js");
-const listController = require("./list-controller.js");
+const stringUtil = require("./js/string-util.js");
+const modeManager = require("./js/mode-manager.js");
+const listKeystroke = require("./js/list-keystroke.js");
+const listController = require("./js/list-controller.js");
 
 // Regist on mode manage.
 modeManager.registBrowseAction({

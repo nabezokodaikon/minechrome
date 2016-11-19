@@ -1,5 +1,7 @@
 tags
 *.asar
-minechrome*/
-src/node_modules/*
-src/db/*
+
+build/
+
+src/db/
+src/node_modules/
