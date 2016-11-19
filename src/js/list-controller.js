@@ -4,6 +4,7 @@ const path = require("path");
 const Immutable = require("immutable");
 const Datastore = require("nedb");
 const appConfig = require("./app-config.js").getAppConfig();
+const log = require("./app-config.js").getLogger();
 const stringUtil = require("./string-util.js");
 
 const activeBackgroundColor = "#5d91c6";
@@ -20,7 +21,7 @@ let currentStartIndex = 0;
 
 historyDB.loadDatabase((err) => {
   if (err) {
-    console.log("DB load failed: %s", err);
+    log.error("DB load failed: %s", err);
   } 
 });
 
@@ -28,7 +29,7 @@ function filtering(db, keyword, callback) {
   if (stringUtil.isEmpty(keyword)) {
     db.find({ $and: [ { keyword: { $regex: /.*/ } } ] }).sort({ date: -1 }).exec((err, docs) => {
       if (err) {
-        console.log("filtering failed: " + err);
+        log.error("filtering failed: " + err);
         return;
       }
 
@@ -43,7 +44,7 @@ function filtering(db, keyword, callback) {
 
     db.find({ $and: keywordQuery }).sort({ date: -1 }).exec((err, docs) => {
       if (err) {
-        console.log("filtering failed: " + err);
+        log.error("filtering failed: " + err);
         return;
       }
 
@@ -190,7 +191,7 @@ module.exports = {
         { upsert: true },
         (err, numReplaced, upsert) => {
           if (err) {
-            console.log("History upsert failed: " + err);
+            log.error("History upsert failed: " + err);
           }
         });    
   },

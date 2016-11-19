@@ -5,6 +5,7 @@ const {Menu, MenuItem} = remote;
 const path = require("path");
 const url = require("url");
 const win = remote.getCurrentWindow();
+const log = require("./js/app-config.js").getLogger();
 const stringUtil = require("./js/string-util.js");
 const modeManager = require("./js/mode-manager.js");
 const listKeystroke = require("./js/list-keystroke.js");
@@ -197,7 +198,7 @@ function searchByKeyword(keyword) {
 }
 
 function onReady() {
-  console.log("webView.dom-ready");
+  log.trace("webView.dom-ready");
 
   listController.init(document);
 
@@ -214,12 +215,12 @@ function onReady() {
   }, false);
 
   webView.addEventListener("new-window", (e) => {
-    console.log("webview.new-window.url: " + e.url);
+    log.trace("webview.new-window.url: " + e.url);
     webView.loadURL(e.url);
   }, false);
 
   webView.addEventListener("did-navigate", (e) => {
-    console.log("webview.did-navigate.url: " + e.url);
+    log.trace("webview.did-navigate.url: " + e.url);
     addressInput.value = e.url;
     modeManager.enterBrowseMode();
   }, false);
@@ -233,12 +234,12 @@ function onReady() {
       return;
     }
 
-    console.log("webView.page-title-updated: " + e.title + ", " + webView.getURL() + ", " + e.explicitSet);
+    log.trace("webView.page-title-updated: " + e.title + ", " + webView.getURL() + ", " + e.explicitSet);
     listController.addHistory({ url: webView.getURL(), title: e.title });
   }, false);
 
   addressInput.addEventListener("keypress", (e) => {
-    console.log("addressInput.keypress: " + e.code);
+    log.trace("addressInput.keypress: " + e.code);
     switch (e.code) {
       case "Enter":
         e.preventDefault();
@@ -308,7 +309,7 @@ window.addEventListener("load", (e) => {
 
 // Document key down event.
 document.addEventListener("keydown", (e) => {
-  console.log("document.keydown: " + e.code);
+  log.trace("document.keydown: " + e.code);
 
   if (listKeystroke.push(e)) {
     e.preventDefault();

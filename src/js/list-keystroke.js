@@ -1,6 +1,7 @@
 "use strict"
 
 const Immutable = require("immutable");
+const log = require("./app-config.js").getLogger();
 
 const prefixCode = "KeyL";
 const historyCode = "KeyL"
@@ -44,11 +45,11 @@ module.exports = {
       try {
         switch (last.code) {
           case historyCode:
-            console.log("Show history.");
+            log.trace("Show history.");
             historyDisplayAction();
             return true;
           case bookmarkCode:
-            console.log("Show bookmark.");
+            log.trace("Show bookmark.");
             bookmarkDisplayAction();
             return true;
           default:

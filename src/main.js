@@ -9,9 +9,6 @@ const globalShortcut = require("./js/global-shortcut.js");
 let win = null;
 
 function createWindow() {
-  log.debug("app.ready");
-  log.debug("app dir: " + path.resolve(""));
-
   win = new BrowserWindow({width: 1280, height: 800});
   win.setAutoHideMenuBar(true);
   win.setMenuBarVisibility(false);
@@ -23,6 +20,7 @@ function createWindow() {
   }));
 
   win.on("closed", () => {
+    log.debug("BrowserWindow.closed");
     win = null;
   });
 
@@ -38,9 +36,15 @@ function createWindow() {
   });
 }
 
-app.on("ready", createWindow);
+app.on("ready", () => {
+  log.debug("app.ready");
+  log.debug("app dir: " + path.resolve(""));
+  createWindow();
+});
 
 app.on("window-all-closed", () => {
+  log.debug("app.window-all-closed");
+
   if (process.platform !== "darwin") {
     app.quit();
   }
@@ -52,6 +56,8 @@ app.on("will-quit", () => {
 });
 
 app.on("activate", () => {
+  log.debug("app.activate");
+
   if (win == null) {
     createWindow();
   }
