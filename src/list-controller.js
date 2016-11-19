@@ -5,16 +5,12 @@ const Immutable = require("immutable");
 const Datastore = require("nedb");
 const stringUtil = require("./string-util.js");
 
-// TODO: Will get values from config file.
 const activeBackgroundColor = "#5d91c6";
 const activeFontColor = "#f7f7f7";
+
+// TODO: Will get values from config file.
 const displayCount = 8;
 const historyDB = new Datastore({ filename: path.join(__dirname, "db/minechrome-history.db") });
-historyDB.loadDatabase((err) => {
-  if (err) {
-    console.log("DB load failed: %s", err);
-  } 
-});
 
 let listBox = null;
 let linkArray = [];
@@ -22,6 +18,12 @@ let currentDB = null;
 let currentFilteringDocs = null;
 let currentIndex = 0;
 let currentStartIndex = 0;
+
+historyDB.loadDatabase((err) => {
+  if (err) {
+    console.log("DB load failed: %s", err);
+  } 
+});
 
 function filtering(db, keyword, callback) {
   if (stringUtil.isEmpty(keyword)) {
@@ -164,7 +166,6 @@ module.exports = {
 
     currentStartIndex = 0;
     currentIndex = 0;
-
     setList(currentDB, keyword, currentStartIndex, (docs) => {
       currentFilteringDocs = docs;
       setActiveColor(0);
