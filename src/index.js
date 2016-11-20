@@ -189,8 +189,7 @@ function listModePreviewAction() {
 }
 
 function listModeDeleteAction() {
-  // TODO: Required implementation.
-  // listController.delete();
+  listController.delete(listItemFindInput.value);
 }
 
 function HistoryListDisplayAction() {

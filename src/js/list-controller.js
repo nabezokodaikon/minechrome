@@ -200,6 +200,59 @@ module.exports = {
     const link = linkArray[index];
     return link.href;
   },
+  delete: (keyword) => {
+    if (!listBox || !currentFilteringDocs) {
+      return;
+    }
+
+    if (currentFilteringDocs.length < 1) {
+      return;
+    }
+
+    const index = currentIndex - currentStartIndex;
+    const link = linkArray[index];
+    currentDB.remove({ url: link.href }, {}, (err, numRemoved) => {
+      if (err) {
+        log.error("removing failed: %s", err);
+        return;
+      }
+
+      if (numRemoved < 1) {
+        log.error("not removing: url = %s", link.href);
+        return;
+      }
+
+      if (currentFilteringDocs.length <= 1) {
+        currentIndex = 0;
+        currentStartIndex = 0;
+        setList(currentDB, keyword, 0, (docs) => {
+          currentFilteringDocs = docs;
+          setActiveColor(0);
+        });
+      } else if (currentFilteringDocs.length <= displayCount) {
+        if (currentIndex == currentFilteringDocs.length - 1) {
+          currentIndex--;
+        }
+        setList(currentDB, keyword, currentStartIndex, (docs) => {
+          currentFilteringDocs = docs;
+          setActiveColor(currentIndex);
+        });
+      } else {
+        if (currentIndex > 0) {
+          currentIndex--;
+        }
+
+        if (currentStartIndex > 0) {
+          currentStartIndex--;
+        }
+
+        setList(currentDB, keyword, currentStartIndex, (docs) => {
+          currentFilteringDocs = docs;
+          setActiveColor(currentIndex - currentStartIndex);
+        });
+      }
+    })
+  },
   addHistory: (args) => {
     const date = Date.now();
     const tag = (new Date(date)).toLocaleString();
