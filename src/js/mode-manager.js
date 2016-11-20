@@ -11,12 +11,14 @@ class Action {
       this.do = (args.do)? args.do: Action.empty;
       this.next = (args.next)? args.next: Action.empty;
       this.preview = (args.preview)? args.preview: Action.empty;
+      this.delete = (args.delete)? args.delete: Action.empty;
     } else {
       this.enter = Action.empty;
       this.escape = Action.empty;
       this.do = Action.empty;
       this.next = Action.empty;
       this.preview = Action.empty;
+      this.delete = Action.delete;
     }
   }
 }
@@ -93,5 +95,8 @@ module.exports = {
   },
   preview: function(e) {
     currentAction.preview(e);
+  },
+  delete: function(e) {
+    currentAction.delete(e);
   }
 }

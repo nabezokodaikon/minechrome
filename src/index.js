@@ -18,6 +18,7 @@ modeManager.registBrowseAction({
   do: browseModeDoAction,
   next: browseModeNextAction,
   preview: browseModePreviewAction,
+  delete: browseModeDeleteAction
 });
 modeManager.registSearchAction({
   enter: searchModeEnterAction,
@@ -25,6 +26,7 @@ modeManager.registSearchAction({
   do: searchModeDoAction,
   next: searchModeNextAction,
   preview: searchModePreviewAction,
+  delete: searchModeDeleteAction
 });
 modeManager.registFindTextAction({
   enter: findTextModeEnterAction,
@@ -32,6 +34,7 @@ modeManager.registFindTextAction({
   do: findTextModeDoAction,
   next: findTextModeNextAction,
   preview: findTextModePreviewAction,
+  delete: findTextModeDeleteAction
 });
 modeManager.registListAction({
   enter: listModeEnterAction,
@@ -39,6 +42,7 @@ modeManager.registListAction({
   do: listModeDoAction,
   next: listModeNextAction,
   preview: listModePreviewAction,
+  delete: listModeDeleteAction
 });
 
 listKeystroke.registHistoryDisplayAction(HistoryListDisplayAction);
@@ -55,12 +59,9 @@ function browseModeEnterAction() {
   webView.focus();
 }
 
-function browseModeEscapeAction() {
-}
+function browseModeEscapeAction() { }
 
-function browseModeDoAction() {
-  // TODO: Required implementation.
-}
+function browseModeDoAction() { }
 
 function browseModeNextAction() {
   if (!webView.canGoForward()) {
@@ -77,6 +78,8 @@ function browseModePreviewAction() {
 
   webView.goBack();
 }
+
+function browseModeDeleteAction() { }
 
 function searchModeEnterAction() {
   addressInput.focus();  
@@ -106,6 +109,10 @@ function searchModeNextAction() {
 
 function searchModePreviewAction() {
   // TODO: Required implementation.
+}
+
+function searchModeDeleteAction() { 
+  addressInput.value = "";
 }
 
 function findTextModeEnterAction() {
@@ -151,6 +158,10 @@ function findTextModePreviewAction() {
   });
 }
 
+function findTextModeDeleteAction() { 
+  findTextInput.value = "";
+}
+
 function listModeEnterAction() {
   // TODO: Required implementation.
   footer.style.visibility = "visible";
@@ -175,6 +186,11 @@ function listModeNextAction() {
 function listModePreviewAction() {
   // TODO: Required implementation.
   listController.preview(listItemFindInput.value);
+}
+
+function listModeDeleteAction() {
+  // TODO: Required implementation.
+  // listController.delete();
 }
 
 function HistoryListDisplayAction() {
@@ -353,6 +369,10 @@ document.addEventListener("keydown", (e) => {
     case "KeyP":
       e.preventDefault();
       modeManager.preview();
+      return;
+    case "KeyD":
+      e.preventDefault();
+      modeManager.delete();
       return;
     default:
       return;
