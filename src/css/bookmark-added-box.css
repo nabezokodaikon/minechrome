@@ -1,0 +1,108 @@
+/* Bookmark added box */
+
+#bookmarkAddedBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  min-width: 48rem;
+  min-height: 8rem;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+
+  background-color: #f7f7f7;
+  border-style: solid;
+  border-width: 0.1rem;
+  border-radius: 0.2rem;
+  border-color: #cccccc;
+  box-shadow: 0.2rem 0.2rem 0.2rem 0rem rgba(0, 0, 0, 0.5);
+
+  z-index: 1;
+
+  visibility: hidden;
+}
+
+#bookmarkAddedBox div:nth-of-type(1) {
+  flex-glow: 1;
+
+  font-size: 1.8rem;
+  margin: 0.4rem;
+}
+
+#bookmarkAddedBox div:nth-of-type(2) {
+  flex-glow: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  margin: 0.4rem;
+}
+
+#bookmarkAddedBox div:nth-of-type(2) div:nth-of-type(1) {
+  flex-glow: 1;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+
+  font-size: 1.4rem;
+}
+
+#bookmarkAddedBox div:nth-of-type(2) div:nth-of-type(1) p:nth-of-type(1) {
+  width: 10%;
+  padding: 0.4rem;
+}
+
+#bookmarkAddedBox div:nth-of-type(2) div:nth-of-type(1) p:nth-of-type(2) {
+  width: 90%;
+  padding: 0.4rem;
+}
+
+#bookmarkAddedBox div:nth-of-type(2) div:nth-of-type(2) {
+  flex-glow: 1;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+
+  font-size: 1.4rem;
+}
+
+#bookmarkAddedBox div:nth-of-type(2) div:nth-of-type(2) p {
+  width: 10%;
+  padding: 0.4rem;
+}
+
+#bookmarkAddedBox div:nth-of-type(2) div:nth-of-type(2) input {
+  width: 90%;
+
+  border-style: solid;
+  border-width: 0.1rem;
+  border-radius: 0.2rem;
+  border-color: #cccccc;
+  padding: 0.4rem;
+}
+
+#bookmarkAddedBox div:nth-of-type(3) {
+  flex-glow: 1;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+#bookmarkAddedBox div:nth-of-type(3) button:nth-of-type(1) {
+  font-size: 1.6rem;
+  margin: 0.4rem;
+  padding: 0.4rem;
+}
+
+#bookmarkAddedBox div:nth-of-type(3) button:nth-of-type(2) {
+  font-size: 1.6rem;
+  margin: 0.4rem;
+  padding: 0.4rem;
+}
