@@ -57,7 +57,6 @@ listKeystroke.registHistoryDisplayAction(HistoryListDisplayAction);
 listKeystroke.registBookmarkDisplayAction(BookmarkListDisplayAction);
 
 let webView = null;
-let loadingBox = null;
 let addressInput = null;
 let findTextBox = null;
 let findTextInput = null;
@@ -279,14 +278,6 @@ function onReady() {
     modeManager.enterBrowseMode();
   }, false);
 
-  webView.addEventListener("did-start-loading", (e) => {
-    loadingBox.style.visibility = "visible";
-  });
-
-  webView.addEventListener("did-stop-loading", (e) => {
-    loadingBox.style.visibility = "hidden";
-  });
-
   webView.addEventListener("new-window", (e) => {
     log.trace("webview.new-window.url: " + e.url);
     webView.loadURL(e.url);
@@ -381,7 +372,6 @@ function onReady() {
 
 window.addEventListener("load", (e) => {
   webView = document.getElementById("webView");
-  loadingBox = document.getElementById("loadingBox");
   addressInput = document.getElementById("addressInput");
   findTextBox = document.getElementById("findTextBox");
   findTextInput = document.getElementById("findTextInput");
