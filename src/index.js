@@ -233,7 +233,7 @@ function bookmarkAddModeDoAction() {
 
   listController.addBookmark({ 
     url: webView.getURL(),
-    title: webView.getURL(),
+    title: webView.getTitle(),
     tag: tag
   });
 }
