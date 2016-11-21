@@ -11,6 +11,7 @@ const activeBackgroundColor = "#5d91c6";
 const activeFontColor = "#f7f7f7";
 const displayCount = appConfig.listDisplayCount;
 const historyDB = new Datastore(appConfig.historyDatabaseFile);
+const bookmarkDB = new Datastore(appConfig.bookmarkDatabaseFile);
 
 let listBox = null;
 let linkArray = [];
@@ -21,7 +22,13 @@ let currentStartIndex = 0;
 
 historyDB.loadDatabase((err) => {
   if (err) {
-    log.error("DB load failed: %s", err);
+    log.error("History database load failed: %s", err);
+  } 
+});
+
+bookmarkDB.loadDatabase((err) => {
+  if (err) {
+    log.error("Bookmark database load failed: %s", err);
   } 
 });
 
@@ -264,7 +271,7 @@ module.exports = {
         { upsert: true },
         (err, numReplaced, upsert) => {
           if (err) {
-            log.error("History upsert failed: " + err);
+            log.error("History database upsert failed: %s", err);
           }
         });    
   },
@@ -280,5 +287,46 @@ module.exports = {
       currentFilteringDocs = docs;
       setActiveColor(0);
     });
+  },
+  getBookmark: (url, callback) => {
+    bookmarkDB.findOne({ url: url }, (err, doc) => {
+      if (err) {
+        log.error("Bookmark findOne failed: %s", err);
+        callback("");
+        return;
+      }
+
+      if (doc) {
+        console.log("Bookmark exists: %s", url);
+        callback(doc.tag);
+        return;
+      } else {
+        console.log("Bookmark not exists: %s", url);
+        callback("");
+        return;
+      }
+    });
+  },
+  addBookmark: (args) => {
+    const tag = args.tag.trim().toLowerCase();
+    if (tag.length < 1) {
+      log.error("tag not found");
+      return;
+    }
+
+    const date = Date.now();
+    const keyword = tag + " " + args.title + " " + args.url;
+
+    bookmarkDB.update(
+        { url: args.url },
+        { url: args.url, title: args.title, date: date, tag: tag, keyword: keyword },
+        { upsert: true },
+        (err, numReplaced, upsert) => {
+          if (err) {
+            log.error("Bookmark database upsert failed: %s", err);
+          }
+
+          log.info("Bookmark added: %s", args.title);
+        });    
   }
 }

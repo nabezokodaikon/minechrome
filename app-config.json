@@ -13,5 +13,6 @@
     }
   ],
   "historyDatabaseFile": "./minechrome-history.db",
+  "bookmarkDatabaseFile": "./minechrome-bookmark.db",
   "listDisplayCount": 8
 }

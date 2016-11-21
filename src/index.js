@@ -63,6 +63,7 @@ let findTextInput = null;
 let footer = null;
 let listItemFindInput = null;
 let bookmarkAddBox = null;
+let bookmarkAddTitle = null;
 let bookmarkAddTagInput = null;
 
 function browseModeEnterAction() {
@@ -203,9 +204,14 @@ function listModeDeleteAction() {
 }
 
 function bookmarkAddModeEnterAction() {
-  // TODO: Search DB by current URL.
-  bookmarkAddBox.style.visibility = "visible";
-  bookmarkAddTagInput.focus();
+  listController.getBookmark(webView.getURL(), (tag) => {
+    bookmarkAddTitle.innerHTML = webView.getTitle();
+    bookmarkAddTagInput.value = tag + " ";
+    bookmarkAddBox.style.visibility = "visible";
+    bookmarkAddTagInput.focus();
+    const caret = bookmarkAddTagInput.value.length;
+    bookmarkAddTagInput.setSelectionRange(caret, caret);
+  });
 }
 
 function bookmarkAddModeEscapeAction() {
@@ -213,7 +219,17 @@ function bookmarkAddModeEscapeAction() {
 }
 
 function bookmarkAddModeDoAction() {
-  // TODO: Required implementation.
+  const tag = bookmarkAddTagInput.value.trim().toLowerCase();
+  if (tag.length < 1) {
+    log.info("Bookmark add canceled");
+    return;
+  }
+
+  listController.addBookmark({ 
+    url: webView.getURL(),
+    title: webView.getURL(),
+    tag: tag
+  });
 }
 
 function bookmarkAddModeNextAction() { }
@@ -334,6 +350,18 @@ function onReady() {
     modeManager.do();
   }, false);
 
+  bookmarkAddTagInput.addEventListener("keypress", (e) => {
+    switch (e.code) {
+      case "Enter":
+        e.preventDefault();
+        modeManager.do();
+        modeManager.enterBrowseMode();
+        return;
+      default:
+        return;
+    }
+  });
+
   // First action.
   modeManager.enterSearchMode();
 
@@ -349,6 +377,7 @@ window.addEventListener("load", (e) => {
   footer = document.getElementById("footer");
   listItemFindInput = document.getElementById("listItemFindInput");
   bookmarkAddBox = document.getElementById("bookmarkAddBox");
+  bookmarkAddTitle = document.getElementById("bookmarkAddTitle");
   bookmarkAddTagInput = document.getElementById("bookmarkAddTagInput");
 
   // The once option of addEventListener will be available in Chrome version 55 and beyond.
