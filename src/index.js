@@ -206,7 +206,13 @@ function listModeDeleteAction() {
 function bookmarkAddModeEnterAction() {
   listController.getBookmark(webView.getURL(), (tag) => {
     bookmarkAddTitle.innerHTML = webView.getTitle();
-    bookmarkAddTagInput.value = tag + " ";
+
+    if (tag.length > 0) {
+      bookmarkAddTagInput.value = tag + " ";
+    } else {
+      bookmarkAddTagInput.value = "";
+    }
+
     bookmarkAddBox.style.visibility = "visible";
     bookmarkAddTagInput.focus();
     const caret = bookmarkAddTagInput.value.length;
@@ -246,8 +252,8 @@ function HistoryListDisplayAction() {
 }
 
 function BookmarkListDisplayAction() {
-  // TODO: Required implementation.
-  // modeManager.enterListMode();
+  listController.loadBookmark(listItemFindInput.value);
+  modeManager.enterListMode();
 }
 
 function searchByKeyword(keyword) {

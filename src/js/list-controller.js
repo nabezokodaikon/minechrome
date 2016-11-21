@@ -328,5 +328,18 @@ module.exports = {
 
           log.info("Bookmark added: %s", args.title);
         });    
+  },
+  loadBookmark: (keyword) => {
+    if (!listBox) {
+      return;
+    }
+
+    currentDB = bookmarkDB;
+    currentStartIndex = 0;
+    currentIndex = 0;
+    setList(currentDB, keyword, currentStartIndex, (docs) => {
+      currentFilteringDocs = docs;
+      setActiveColor(0);
+    });
   }
 }
