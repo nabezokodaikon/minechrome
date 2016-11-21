@@ -6,7 +6,6 @@
   justify-content: space-between;
 
   min-width: 48rem;
-  min-height: 8rem;
 
   position: absolute;
   top: 50%;
@@ -84,25 +83,5 @@
   border-width: 0.1rem;
   border-radius: 0.2rem;
   border-color: #cccccc;
-  padding: 0.4rem;
-}
-
-#bookmarkAddedBox div:nth-of-type(3) {
-  flex-glow: 1;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-}
-
-#bookmarkAddedBox div:nth-of-type(3) button:nth-of-type(1) {
-  font-size: 1.6rem;
-  margin: 0.4rem;
-  padding: 0.4rem;
-}
-
-#bookmarkAddedBox div:nth-of-type(3) button:nth-of-type(2) {
-  font-size: 1.6rem;
-  margin: 0.4rem;
   padding: 0.4rem;
 }
