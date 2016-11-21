@@ -122,9 +122,7 @@ function searchModePreviewAction() {
   // TODO: Required implementation.
 }
 
-function searchModeDeleteAction() { 
-  addressInput.value = "";
-}
+function searchModeDeleteAction() { }
 
 function findTextModeEnterAction() {
   findTextBox.style.visibility = "visible";
@@ -169,12 +167,10 @@ function findTextModePreviewAction() {
   });
 }
 
-function findTextModeDeleteAction() { 
-  findTextInput.value = "";
-}
+function findTextModeDeleteAction() { }
 
 function listModeEnterAction() {
-  // TODO: Required implementation.
+  listItemFindInput.value = "";
   footer.style.visibility = "visible";
   listItemFindInput.focus();
 }
@@ -242,9 +238,7 @@ function bookmarkAddModeNextAction() { }
 
 function bookmarkAddModePreviewAction() { }
 
-function bookmarkAddModeDeleteAction() {
-  bookmarkAddTagInput.value = "";
-}
+function bookmarkAddModeDeleteAction() { }
 
 function HistoryListDisplayAction() {
   listController.loadHistory(listItemFindInput.value);

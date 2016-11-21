@@ -102,18 +102,34 @@
   color: inherit;
   margin: 0.2rem;
   font-size: 1.4rem;
+
+  padding: 0.2rem;
 }
 
 #listBox li a span:nth-child(1) {
-  margin-right: 2em;
+  margin-right: 1em;
+
+  color: #f7f7f7;
+  background-color: #5d91c6;
+
+  border-style: solid;
+  border-width: 0.1rem;
+  border-radius: 0.2rem;
+  border-color: #cccccc;
 }
 
 #listBox li a span:nth-child(2) {
-  margin-right: 4em;
+  margin-right: 1em;
 }
 
 #listBox li a span:nth-child(3) {
-  flex-grow: 2;
+  color: #f7f7f7;
+  background-color: #5d91c6;
+
+  border-style: solid;
+  border-width: 0.1rem;
+  border-radius: 0.2rem;
+  border-color: #cccccc;
 }
 
 
