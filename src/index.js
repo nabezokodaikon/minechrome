@@ -170,7 +170,6 @@ function findTextModePreviewAction() {
 function findTextModeDeleteAction() { }
 
 function listModeEnterAction() {
-  listItemFindInput.value = "";
   footer.style.visibility = "visible";
   listItemFindInput.focus();
 }
@@ -241,11 +240,13 @@ function bookmarkAddModePreviewAction() { }
 function bookmarkAddModeDeleteAction() { }
 
 function HistoryListDisplayAction() {
+  listItemFindInput.value = "";
   listController.loadHistory(listItemFindInput.value);
   modeManager.enterListMode();
 }
 
 function BookmarkListDisplayAction() {
+  listItemFindInput.value = "";
   listController.loadBookmark(listItemFindInput.value);
   modeManager.enterListMode();
 }
