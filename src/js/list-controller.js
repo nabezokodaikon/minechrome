@@ -63,9 +63,9 @@ function filtering(db, keyword, callback) {
 function getItemSpans(link) {
   const elements = link.getElementsByTagName("span");
   return {
-    tagSpan: elements[0],
-    titleSpan: elements[1],
-    urlSpan: elements[2],
+    titleSpan: elements[0],
+    tagSpan: elements[1],
+    urlSpan: elements[2]
   };
 }
 
@@ -74,9 +74,9 @@ function setList(db, keyword, startIndex, callback) {
   for (const i of Array.from(Array(displayCount).keys())) {
     const link = linkArray[i];
     link.href = "";
-    const {tagSpan, titleSpan, urlSpan} = getItemSpans(link);
-    tagSpan.innerHTML = "";
+    const {titleSpan, tagSpan, urlSpan} = getItemSpans(link);
     titleSpan.innerHTML = "";
+    tagSpan.innerHTML = "";
     urlSpan.innerHTML = "";
   }
 
@@ -86,9 +86,9 @@ function setList(db, keyword, startIndex, callback) {
       const item = docs[i + startIndex];
       const link = linkArray[i];
       link.href = item.url;
-      const {tagSpan, titleSpan, urlSpan} = getItemSpans(link);
-      tagSpan.innerHTML = item.tag;
+      const {titleSpan, tagSpan, urlSpan} = getItemSpans(link);
       titleSpan.innerHTML = item.title;
+      tagSpan.innerHTML = item.tag;
       urlSpan.innerHTML = item.url;
     }
 
@@ -123,13 +123,13 @@ module.exports = {
     for (const i of Array.from(Array(displayCount).keys())) {
       const item = document.createElement("li");
       const link = document.createElement("a");
-      const tagSpan = document.createElement("span");
       const titleSpan = document.createElement("span");
+      const tagSpan = document.createElement("span");
       const urlSpan = document.createElement("span");
       link.href = "";
       link.setAttribute("disabled", "disabled");
-      link.appendChild(tagSpan); 
       link.appendChild(titleSpan); 
+      link.appendChild(tagSpan); 
       link.appendChild(urlSpan); 
       item.appendChild(link);
       listBox.appendChild(item);
