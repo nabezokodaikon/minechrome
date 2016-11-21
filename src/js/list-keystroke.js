@@ -4,7 +4,7 @@ const Immutable = require("immutable");
 const log = require("./app-config.js").getLogger();
 
 const prefixCode = "KeyL";
-const historyCode = "KeyL"
+const historyCode = "KeyH"
 const bookmarkCode = "KeyB"
 const interval = 3000.0;
 const emptyList = Immutable.List();
