@@ -44,6 +44,14 @@ modeManager.registListAction({
   preview: listModePreviewAction,
   delete: listModeDeleteAction
 });
+modeManager.registBookmarkAddAction({
+  enter: bookmarkAddModeEnterAction,
+  escape: bookmarkAddModeEscapeAction,
+  do: bookmarkAddModeDoAction,
+  next: bookmarkAddModeNextAction,
+  preview: bookmarkAddModePreviewAction,
+  delete: bookmarkAddModeDeleteAction
+});
 
 listKeystroke.registHistoryDisplayAction(HistoryListDisplayAction);
 listKeystroke.registBookmarkDisplayAction(BookmarkListDisplayAction);
@@ -54,6 +62,8 @@ let findTextBox = null;
 let findTextInput = null;
 let footer = null;
 let listItemFindInput = null;
+let bookmarkAddBox = null;
+let bookmarkAddTagInput = null;
 
 function browseModeEnterAction() {
   webView.focus();
@@ -192,6 +202,28 @@ function listModeDeleteAction() {
   listController.delete(listItemFindInput.value);
 }
 
+function bookmarkAddModeEnterAction() {
+  // TODO: Search DB by current URL.
+  bookmarkAddBox.style.visibility = "visible";
+  bookmarkAddTagInput.focus();
+}
+
+function bookmarkAddModeEscapeAction() {
+  bookmarkAddBox.style.visibility = "hidden";
+}
+
+function bookmarkAddModeDoAction() {
+  // TODO: Required implementation.
+}
+
+function bookmarkAddModeNextAction() { }
+
+function bookmarkAddModePreviewAction() { }
+
+function bookmarkAddModeDeleteAction() {
+  bookmarkAddTagInput.value = "";
+}
+
 function HistoryListDisplayAction() {
   listController.loadHistory(listItemFindInput.value);
   modeManager.enterListMode();
@@ -316,6 +348,8 @@ window.addEventListener("load", (e) => {
   findTextInput = document.getElementById("findTextInput");
   footer = document.getElementById("footer");
   listItemFindInput = document.getElementById("listItemFindInput");
+  bookmarkAddBox = document.getElementById("bookmarkAddBox");
+  bookmarkAddTagInput = document.getElementById("bookmarkAddTagInput");
 
   // The once option of addEventListener will be available in Chrome version 55 and beyond.
   // webView.addEventListener("dom-ready", onReady, {once: true});
@@ -360,6 +394,10 @@ document.addEventListener("keydown", (e) => {
     case "KeyS":
       e.preventDefault();
       modeManager.enterSearchMode();
+      return;
+    case "KeyB":
+      e.preventDefault();
+      modeManager.enterBookmarkAddMode();
       return;
     case "KeyN":
       e.preventDefault();

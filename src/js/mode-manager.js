@@ -29,6 +29,7 @@ let browseAction = emptyAction;
 let searchAction = emptyAction;
 let findTextAction = emptyAction;
 let listAction = emptyAction;
+let bookmarkAddAction = emptyAction;
 let currentAction = emptyAction;
 
 module.exports = {
@@ -45,6 +46,9 @@ module.exports = {
   registListAction: function(action) {
     listAction = new Action(action)
   },
+  registBookmarkAddAction: function(action) {
+    bookmarkAddAction = new Action(action)
+  },
 
   enterBrowseMode: function(e) {
     if (currentAction == browseAction) {
@@ -54,6 +58,7 @@ module.exports = {
     searchAction.escape();
     findTextAction.escape();
     listAction.escape();
+    bookmarkAddAction.escape();
     currentAction = browseAction;
   },
   enterSearchMode: function(e) {
@@ -64,6 +69,7 @@ module.exports = {
     searchAction.enter(e);
     findTextAction.escape();
     listAction.escape();
+    bookmarkAddAction.escape();
     currentAction = searchAction;
   },
   enterFindTextMode: function(e) {
@@ -74,6 +80,7 @@ module.exports = {
     searchAction.escape();
     findTextAction.enter(e);
     listAction.escape();
+    bookmarkAddAction.escape();
     currentAction = findTextAction;
   },
   enterListMode: function(e) {
@@ -84,7 +91,19 @@ module.exports = {
     searchAction.escape();
     findTextAction.escape();
     listAction.enter(e);
+    bookmarkAddAction.escape();
     currentAction = listAction;
+  },
+  enterBookmarkAddMode: function(e) {
+    if (currentAction == bookmarkAddAction) {
+      return;
+    }
+    browseAction.escape();
+    searchAction.escape();
+    findTextAction.escape();
+    listAction.escape();
+    bookmarkAddAction.enter(e);
+    currentAction = bookmarkAddAction;
   },
   
   do: function(e) {

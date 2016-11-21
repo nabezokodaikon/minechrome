@@ -38,7 +38,7 @@ module.exports = {
       }
 
       const last = target.last();
-      if ((last.timeStamp - first.timeStamp) > interval) {
+      if (last.ctrlKey || (last.timeStamp - first.timeStamp) > interval) {
         return false;
       }
 

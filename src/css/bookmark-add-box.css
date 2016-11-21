@@ -1,6 +1,6 @@
 /* Bookmark added box */
 
-#bookmarkAddedBox {
+#bookmarkAddBox {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -24,14 +24,14 @@
   visibility: hidden;
 }
 
-#bookmarkAddedBox div:nth-of-type(1) {
+#bookmarkAddBox div:nth-of-type(1) {
   flex-glow: 1;
 
   font-size: 1.8rem;
   margin: 0.4rem;
 }
 
-#bookmarkAddedBox div:nth-of-type(2) {
+#bookmarkAddBox div:nth-of-type(2) {
   flex-glow: 1;
 
   display: flex;
@@ -41,7 +41,7 @@
   margin: 0.4rem;
 }
 
-#bookmarkAddedBox div:nth-of-type(2) div:nth-of-type(1) {
+#bookmarkAddBox div:nth-of-type(2) div:nth-of-type(1) {
   flex-glow: 1;
 
   display: flex;
@@ -51,17 +51,17 @@
   font-size: 1.4rem;
 }
 
-#bookmarkAddedBox div:nth-of-type(2) div:nth-of-type(1) p:nth-of-type(1) {
+#bookmarkAddBox div:nth-of-type(2) div:nth-of-type(1) p:nth-of-type(1) {
   width: 10%;
   padding: 0.4rem;
 }
 
-#bookmarkAddedBox div:nth-of-type(2) div:nth-of-type(1) p:nth-of-type(2) {
+#bookmarkAddBox div:nth-of-type(2) div:nth-of-type(1) p:nth-of-type(2) {
   width: 90%;
   padding: 0.4rem;
 }
 
-#bookmarkAddedBox div:nth-of-type(2) div:nth-of-type(2) {
+#bookmarkAddBox div:nth-of-type(2) div:nth-of-type(2) {
   flex-glow: 1;
 
   display: flex;
@@ -71,12 +71,12 @@
   font-size: 1.4rem;
 }
 
-#bookmarkAddedBox div:nth-of-type(2) div:nth-of-type(2) p {
+#bookmarkAddBox div:nth-of-type(2) div:nth-of-type(2) p {
   width: 10%;
   padding: 0.4rem;
 }
 
-#bookmarkAddedBox div:nth-of-type(2) div:nth-of-type(2) input {
+#bookmarkAddBox div:nth-of-type(2) div:nth-of-type(2) input {
   width: 90%;
 
   border-style: solid;
